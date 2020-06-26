@@ -1,41 +1,40 @@
-#These functions allow for multiple metrics and compute the Smallest Worthwhile Change (SWC) for each metric
-#The subject and trial must be the first and second columns, respectively, in the input data to the function
-#The remaining columns should be the measurements of the various metrics for which we want to compute the SWC
+#These functions take the "Subject" vector as its first argument and any number of metrics as its following arguments
+#It computes the Smallest Worthwhile Change (SWC) for each metric
+#The logical "max" allows the user to specify whether the scores used to compute the SWC should be the maximum or minimum values
 
-#This function is meant for metrics where the highest score is best (e.g. measurements of force or power)
-SWC_max <- function(Subject, Metric){
-#Renames the first column as "Subject", so that it can be referred to in the group_by function later
-colnames(data)[1] <- "Subject"
-#These two lines calculate the maximum value ("best score") that each subject records for each numeric column (i.e. each metric)
-data <- group_by(data, Subject)
-data <- summarize_if(data, is.numeric, max)
-#Applies the standard deviation function to all columns except the Subject column
-sd_best = lapply(data[,-1], sd)
+SWC <- function(Subject, ..., max = TRUE) {
 
-#A for loop, iterating over all items in sd_best created above
-for(i in seq_along(sd_best)){
-  #Creates Smallest Worthwhile Change for each item in sd_best (the double brackets refer to an item in a list)
-  SWC = 0.2*sd_best[[i]]
-  #Forms a list of these SWC values, as was previously done for the TE values
-  list_SWC <- list(SWC)
-  #Keeps the labeling of each item in this list consistent with the TE list
-  names(list_SWC) <- paste("Smallest Worthwhile Change", colnames(data)[i+1], sep = "--")
-  print(list_SWC)
+  #The inputs to this function are individual vectors, so I bring them all together into one data frame
+  df <- data.frame(Subject, ...)
+
+  #Subject needs to be a factor variable in order for the next part to work
+  Subject<-as.factor(Subject)
+
+  #This part summarises the numeric columns of the data, by each Subject's "best score"
+  if(max == TRUE) {
+    #The default is for each subject's "best score" to be the maximum value he or she records (e.g. power/force)
+    df <- group_by(df, Subject)
+    df <- summarise(df, across(where(is.numeric), ~ max(.x)))
+  } else {
+    #Otherwise, each subject's "best score" is the minimum value he or she records (e.g. 40-yard dash times)
+    df <- group_by(df, Subject)
+    df <- summarise(df, across(where(is.numeric), ~ min(.x)))
   }
-}
 
-#This function is exactly the same as the one above, but it is meant for metrics where the lowest score is best (e.g. 40-yard dash times)
-SWC_min <- function(data){
-  colnames(data)[1] <- "Subject"
-  #These two lines calculate the minimum value ("best score") that each subject records for each numeric column (i.e. each metric)
-  data <- group_by(data, Subject)
-  data <- summarize_if(data, is.numeric, min)
-  sd_best = lapply(data[,-1], sd)
+  #This line calculates the standard deviation of all of the columns (i.e. the between-subject SD of the best scores)
+  sd_best = lapply(df[,-1], sd)
 
-  for(i in seq_along(sd_best)){
+  #A for loop, iterating over all items in sd_best created above
+  for(i in seq_along(sd_best)) {
+    #Creates Smallest Worthwhile Change for each item in sd_best (the double brackets refer to an item in a list)
     SWC = 0.2*sd_best[[i]]
+
+    #Forms a list of these SWC values, as was previously done for the TE values
     list_SWC <- list(SWC)
-    names(list_SWC) <- paste("Smallest Worthwhile Change", colnames(data)[i+1], sep = "--")
+
+    #Keeps the labeling of each item in this list consistent with the TE list
+    names(list_SWC) <- paste("Smallest Worthwhile Change", colnames(df)[i+1], sep = "--")
     print(list_SWC)
   }
+
 }
