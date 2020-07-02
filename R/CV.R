@@ -1,55 +1,48 @@
-#This function computes the coefficient of variation for each athlete's measurements (expressed as a percentage)
+#' Coefficient of Variation (CV) for a set of athlete measurements, expressed as a percentage of the mean
+#'
+#' Computes the CV for each vector of measurements that is passed to the function, for the vector of subjects that is the first argument
+#'
+#' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
+#' @param ... Numeric vectors that represent the metrics for which the CV should be computed. These vectors hold the scores that
+#'   each athlete recorded for each respective metric (at least one metric must be passed to the function)
+#' @return A list, with its contents being the group-level CV's of each metric (and labeled as such), is the output of this function
+#' @example
+#' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
+#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
+#' CV(subject, metric_1, metric_2)
 
-library(tidyverse)
+#' @export
+CV <- function(subject, ...) {
 
-CV <- function(data){
-#Renames the first column as "Subject", so that it can be referred to in the group_by function later
-  colnames(data)[1] <- "Subject"
-#These three lines calculate the standard deviation and mean that each subject records for each numeric column (i.e. for each metric)
-  data <- group_by(data, Subject)
-  data1 <- summarize_if(data, is.numeric, funs(sd, mean))
-  data1 <- data1[,-1]
+  #The inputs to this function are individual vectors, so here they brought together into one data frame
+  CV_df <- data.frame(subject, ...)
 
-#Creates a variable that equals the number of metrics in the dataset, which makes the following for loop easier
-  num_metrics = ncol(data1)/2
-#I create the list now, which makes it easier to append it in the for loop that follows
-  list_CV <- list()
+  #The subject variable should be a factor variable, in order for the summarize_if function below to work
+  subject <- as.factor(subject)
 
-#This for loop iterates over just the first half of the columns in the dataset
-  for(i in 1:num_metrics){
-#This line renames the first three columns of the new dataset in a way that makes the names of the list more intuitive
-    colnames(data1)[i] <- paste("CV Percentage Change", colnames(data)[i+2], sep = "--")
-#With "i + num_metrics" I match up the column that is the sd of a metric with the column that is the mean of the same metric
-    CV = (data1[,i]/data1[,i+num_metrics])*100
-#I append the CV's to the list that I created earlier
-    list_CV <- append(list_CV, values = CV)
-#This line calculates the mean value of each item in the list (i.e. the mean of all athlete-level CV's for each metric)
-    mean_CV <- lapply(list_CV, mean)
+  #In order for the CV for the entire sample to be calculated, the within-subject sd and mean first need to be computed
+  CV_df <- group_by(CV_df, subject)
+  CV_sd <- summarize_if(CV_df, is.numeric, sd)
+  CV_mean <- summarize_if(CV_df, is.numeric, mean)
+
+  #This for loop iterates over all of the metrics passed to the function as its arguments
+  for (i in 2:nargs()) {
+
+    #The CV for each individual is the sd divided by the mean, multiplied by 100 (which expresses it as a percentage)
+    CV_ind = (CV_sd[, i] / CV_mean[, i]) * 100
+
+    #First create the list to hold each individual's CV value for each metric, then append the individual CV values into it
+    list_CV_ind <- list()
+    list_CV_ind <- append(list_CV_ind, values = CV_ind)
+
+    #The CV for each metric for the entire group is simply the mean of the individual CV's for each metric
+    CV_group <- lapply(list_CV_ind, mean)
+
+    #Names each element of the CV_group list by the metric it represents, and explicitly prints out the list to see its full contents
+    names(CV_group) <- paste("CV(%)", colnames(CV_df)[i], sep = "--")
+    print(CV_group)
+
   }
 
-#Print out the result of the lapply function so that we can see all of its contents
-  print(mean_CV)
 }
-
-#We again need to group the original dataset by subject, but this time calculate the maximum value that each subject recorded
-  data2<-group_by(data, "Subject")
-  data2<-summarize_if(data, is.numeric, max)
-#The average of these best scores is computed via the line of code below
-  best_avg = lapply(data2[,-1], mean)
-
-#We need another for loop, this time to iterate over the entire best_avg list we just created
-  for (i in seq_along(best_avg)){
-#The CV change we care about is the average of the best scores divided by 100 and multiplied by the CV we calculated in the previous list
-    CV_change = (best_avg[[i]]/100)*(mean_CV[[i]])
-#Just multiply this value by 2 to obtain double the CV
-    Dbl_CV_change = CV_change*2
-#Create a list for each of these statistics
-    list_CV_change<-list(CV_change)
-    list_Dbl_CV_change<-list(Dbl_CV_change)
-#Name each element of each list with the statistic it represents (i.e. CV Change or Double CV Change) and the metric it represents
-    names(list_CV_change)<-paste("CV Change", colnames(data2)[i+1], sep = "--")
-    names(list_Dbl_CV_change)<-paste("Double CV Change", colnames(data2)[i+1], sep = "--")
-#Explicitly print both of the lists so that we see their full contents in the output of the function
-    print(list_CV_change)
-    print(list_Dbl_CV_change)
-  }
