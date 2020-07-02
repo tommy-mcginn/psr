@@ -1,11 +1,15 @@
 Package: PerformanceScienceReliability
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Reliability Functions for Performance Science Metrics 
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Tommy McGinn
+Maintainer: Tommy McGinn <tmcginn1@nd.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    tidyverse
+Imports: 
+    psych
