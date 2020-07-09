@@ -70,9 +70,9 @@ SWC <- function(subject, metric_1, ..., max = TRUE) {
 #' @param reliability A vector of the measures of reliability (i.e. the ICC's) for each of the metrics included in the "..."
 #'   argument. This vector must contain the same number of elements as the number of metrics that have been passed to the function
 #'   in the "..." argument, and the reliability values must appear in the same order as the metrics appear in the "..." argument.
-#' @param alpha The p-value of the standard normal distribution for which the user wants the MDD to be computed.  This p-value
-#'   should be given for a one-sided test, so if the user wants to know the change that one could be 95% confident is not due to
-#'   measurement error, the user should input alpha = 0.975 to the function, which is also the default value for the function.
+#' @param confidence The degree of confidence the user wants to have that an improvement exceeding the MDD can be interpreted as
+#'   real change, and not the result of measurement error. Set to a default value of 0.95, this parameter is used to calculate the
+#'   corresponding critical value from the standard normal distribution to which we compare the RCI.
 #' @param ... Numeric vectors that represent the metrics for which the SEM should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #' @return A list, with its contents being the SEM of each metric
@@ -81,13 +81,12 @@ SWC <- function(subject, metric_1, ..., max = TRUE) {
 #' trial <- c("Trial 1", "Trial 2", "Trial 3", "Trial 1", "Trial 2", "Trial 3", "Trial 1", "Trial 2", "Trial 3")
 #' baseline <- which(trial == "Trial 1")
 #' reliability <- c(0.93, 0.98, 0.95)
-#' alpha <- 0.975
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' MDD(subject, trial, baseline, reliability, alpha, metric_1, metric_2)
+#' MDD(subject, trial, baseline, reliability, confidence = 0.95, metric_1, metric_2)
 
 #' @export
-MDD <- function(subject, trial, baseline, reliability, alpha = 0.975, ...) {
+MDD <- function(subject, trial, baseline, reliability, confidence = 0.95, ...) {
 
   #The inputs to this function are individual vectors, so here they are brought together into one data frame
   MDD_df <- data.frame(subject, trial, ...)
@@ -102,7 +101,7 @@ MDD <- function(subject, trial, baseline, reliability, alpha = 0.975, ...) {
   reliability <- as.list(reliability)
 
   #This line turns the alpha value the user passed to the function into the critical value for which we use it later in the function
-  crit_val <- qnorm((1 - alpha) / 2, lower = F)
+  crit_val <- qnorm(0.95)
 
   #Iterates over all items (i.e. all metrics) in the SD_baseline list created above
   for (i in seq_along(SD_baseline)) {
