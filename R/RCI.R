@@ -4,7 +4,7 @@
 #' generated, with the length of each vector equaling the number of athletes passed to the function
 #'
 #' @param subject The subjects on which the RCI test should be run
-#' @param initial_trial The date that represents what is considered the "pre-test" results for the RCI test
+#' @param baseline The measurements to be considered the "baseline" results for the calculation of the RCI
 #' @param reliability A vector of the measures of reliability (i.e. the ICC's) for each of the metrics included in the
 #'   "..." argument. This vector must contain the same number of elements as the number of metrics that have been
 #'   passed to the function in the "..." argument, and the reliability values must appear in the same order as the
@@ -21,7 +21,7 @@
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c("Trial 1", "Trial 2", "Trial 3", "Trial 1", "Trial 2", "Trial 3", "Trial 1", "Trial 2", "Trial 3")
-#' initial_trial <- which(trial == "Trial 1")
+#' pre_test <- which(trial == "Trial 1")
 #' final_trial <- which(trial == "Trial 2")
 #' reliability <- c(0.93, 0.98, 0.95)
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
@@ -29,13 +29,13 @@
 #' RCI(subject, initial_trial, final_trial, metric_1, metric_2)
 
 #' @export
-RCI <- function(subject, initial_trial, reliability, confidence = 0.95, ...) {
+RCI <- function(subject, baseline, reliability, confidence = 0.95, ...) {
 
   #The individual subject and metric vectors that were passed to this function are brought together into a data frame
   RCI_df <- data.frame(subject, ...)
 
   #We care only about the results of the trial we labeled as the "initial trial" in the function arguments
-  RCI_df <- RCI_df[c(initial_trial), ]
+  RCI_df <- RCI_df[c(baseline), ]
 
   #For each column except that of the subjects in the data, we want to compute the between-athlete sd
   SD_baseline <- lapply(RCI_df[, -1], sd)
