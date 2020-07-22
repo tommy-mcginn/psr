@@ -1,4 +1,4 @@
-Package: PerformanceScienceReliability
+Package: PerfSciReliability
 Type: Package
 Title: Reliability Functions for Performance Science Metrics 
 Version: 0.1.0
@@ -6,10 +6,15 @@ Author: Tommy McGinn
 Maintainer: Tommy McGinn <tmcginn1@nd.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
 Encoding: UTF-8
+License: Insert license here
 LazyData: true
-Depends: 
-    tidyverse
-Imports: 
+Imports:
+    dplyr,
+    tidyr,
     psych
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.1.0
