@@ -1,0 +1,55 @@
+---
+title: "An Updated Version of the ICC function in the psych package"
+author: "Tommy McGinn"
+date: "7/13/20"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{An Updated Version of the ICC function in the psych package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+#Different Argument Forms
+
+The ICC function in the psych package takes entire data as its only input. In addition, it also requires that the data be in the "wide" form, so that each subject is its own row, the trials represent the columns, and each subject's measurement from each trial fills in the entries of the data. A table in this "wide" form of data looks like this:
+
+| Subject | Trial 1 | Trial 2 | Trial 3 |
+|--------:|:-------:|:-------:|:--------|
+|    1    |   275   |   208   |   239   |
+|    2    |   217   |   260   |   274   |
+|    3    |   267   |   261   |   253   |
+
+In reality many data are actually in "long" form, so that there are multiple rows for each subject and a column representing which trial each measurement came from. A data table in "long form" looks like this:
+
+| Subject |  Trial  | Score |
+|--------:|:-------:|:------|
+|    1    | Trial 1 |  275  |
+|    1    | Trial 2 |  208  |
+|    1    | Trial 3 |  239  |
+|    2    | Trial 1 |  217  |
+|    2    | Trial 2 |  260  |
+|    2    | Trial 3 |  274  |
+|    3    | Trial 1 |  267  |
+|    3    | Trial 2 |  261  |
+|    3    | Trial 3 |  253  |
+
+The ICC function in the PerfSciReliability package explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" format (using the pivot_wider function in the tidyr package), so that the ICC function from the psych package can be run on each metric, displaying the same output that the ICC function from the psych package would display. In other words, our ICC function is a "wrapper" function for that in the psych package, which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in whatever format, as long as the user can properly extract these vectors from the data.
+
+#Allowing Any Number of Metrics
+
+An extension of the difference described in the previous section is the fact that the ICC function in the PerfSciReliability package allows for the simultaneous computation of the ICC for multiple metrics, however many the user wants, whereas the ICC function in the psych package is limited in that, as it takes as its input data in "wide" format, it can only calculate the ICC for one metric at a time, due to the fact that data in "wide" format by construction include only the measurements of one metric.
+
+To further explain the gained efficiency from using the new and improved version of the ICC function, if one wanted to see the ICC output of five different metrics from a given group of subjects and was using the ICC function in the psych package, that person would need to create five different data frames, one for each metric, all in "wide" form, and pass each data frame to the ICC function separately. To illustrate this point further, the user would need to run the following code for each metric of interest:
+
+```{r, eval = FALSE}
+tidyr::pivot_wider(data, names_from = "trial", values_from = "metric")
+psych::ICC(data)
+```
+
+Conversely, using the PerfSciReliability ICC function, the user could simply enter the subject and trial vectors before entering the five vectors containing the measurements for each metric, subsequently showing the ICC output for all five metrics after just one function call. In short, the user only needs to run the following code once:
+
+```{r, eval = FALSE}
+PerformanceScienceReliability::ICC(subject, trial, metric1, metric2, metric3, metric4, metric5)
+```
+
+This simplified process cuts down considerably on the time and effort required by the user in order to see the ICC output for all five metrics. In addition, all of the ICC outputs for the various metrics can be seen one directly after another, making it easier to compare the reliability of each metric. 
