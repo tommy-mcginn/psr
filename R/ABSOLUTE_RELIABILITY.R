@@ -45,7 +45,9 @@ TE <- function(subject, trial, ...) {
 
     #Places the TE values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(TE))
-    colnames(output_df)[i + 1] <- colnames(full_df)[i + 1]
+
+    #Sets the column names as the metrics that their TE values in the table represent
+    colnames(output_df)[i - 1] <- colnames(full_df)[i]
 
   }
 
