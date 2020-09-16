@@ -26,10 +26,6 @@ TE <- function(subject, trial, ...) {
   #The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, trial, ...)
 
-  #The subject and trial vectors must be factor variables in order for the linear model to work properly later on
-  subject <- as.factor(subject)
-  trial <- as.factor(trial)
-
   #This data frame is created from the get-go, and it will be the output that is returned at the end
   output_df <- data.frame(Metric = paste("TE"))
 
@@ -39,8 +35,22 @@ TE <- function(subject, trial, ...) {
     #We say that "metric" is the ith column of the data frame for each iteration, then use it in the linear model that follows
     metric <- full_df[, i]
 
+    #Checks to make sure the metric vector is numeric, producing an informative error message if it is not
+    if (is.numeric(metric) == FALSE) {
+
+      print("Each metric column must be a numeric vector")
+
+    }
+
+    #Checks to make sure each athlete has recorded exactly one measurement for every trial, producing an informative error message if not
+    if (length(unique(subject)) * length(unique(trial)) != length(metric)) {
+
+      print("Each athlete must have recorded the same number of trials")
+
+    }
+
     #The Typical Error is the residual standard error (which is what the sigma function computes) of the following regression
-    lm_TE <- stats::lm(metric ~ subject + trial)
+    lm_TE <- stats::lm(metric ~ as.factor(subject) + as.factor(trial))
     TE = stats::sigma(lm_TE)
 
     #Places the TE values into a table and names each row of the table by its metric, which makes for clean output
