@@ -42,7 +42,7 @@ TE <- function(subject, trial, ...) {
 
     }
 
-    #Checks to make sure each athlete has recorded exactly one measurement for every trial, producing an informative error message if not
+    #Produces an informative error message if each athlete has not recorded exactly one measurement for each trial
     if (length(unique(subject)) * length(unique(trial)) != length(metric)) {
 
       print("Each athlete must have recorded the same number of trials")
@@ -87,9 +87,34 @@ TE <- function(subject, trial, ...) {
 #' @references Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
 #'
 #' @export
-CV <- function(subject, ...) {
+CV <- function(subject, trial, ...) {
 
   #The inputs to this function are individual vectors, so here they brought together into one data frame
+  full_df <- data.frame(subject, trial, ...)
+
+  #This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
+  for (i in 3:ncol(full_df)) {
+
+    #Assigns each metric to be the ith column in the full data frame
+    metric <- full_df[, i]
+
+    #Checks to make sure the metric vector is numeric, producing an informative error message if it is not
+    if (is.numeric(metric) == FALSE) {
+
+      print("Each metric column must be a numeric vector")
+
+    }
+
+    #Produces an informative error message if each athlete has not recorded exactly one measurement for each trial
+    if (length(unique(subject)) * length(unique(trial)) != length(metric)) {
+
+      print("Each athlete must have recorded the same number of trials")
+
+    }
+
+  }
+
+  #We don't need the trials after the above error checking, so they are deleted from the full data frame
   full_df <- data.frame(subject, ...)
 
   #The subject variable should be a factor variable, in order for the summarize_if function below to work
@@ -99,15 +124,15 @@ CV <- function(subject, ...) {
   output_df <- data.frame(Metric = paste("CV"))
 
   #In order for the CV for the entire sample to be calculated, the within-subject sd and mean first need to be computed
-  CV_df <- dplyr::group_by(full_df, subject)
+  full_df <- dplyr::group_by(full_df, subject)
   CV_sd <- dplyr::summarise_if(full_df, is.numeric, stats::sd)
   CV_mean <- dplyr::summarise_if(full_df, is.numeric, mean)
 
   #This for loop iterates over all of the metrics passed to the function as its arguments
-  for (i in 2:nargs()) {
+  for (i in 3:nargs()) {
 
     #The CV for each individual is the sd divided by the mean, multiplied by 100 (which expresses it as a percentage)
-    CV_ind = (CV_sd[, i] / CV_mean[, i]) * 100
+    CV_ind = (CV_sd[, i - 1] / CV_mean[, i - 1]) * 100
 
     #First create the list to hold each individual's CV value for each metric, then append the individual CV values into it
     list_CV_ind <- list()
@@ -118,7 +143,7 @@ CV <- function(subject, ...) {
 
     #Places the CV values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(CV_group))
-    colnames(output_df)[i] <- colnames(full_df)[i]
+    colnames(output_df)[i - 1] <- colnames(full_df)[i - 1]
 
   }
 
@@ -159,10 +184,34 @@ CV <- function(subject, ...) {
 #'   Relevant to Sports Medicine. Sports Medicine, 26(4), 217-238.
 #'
 #' @export
-SEM <- function(subject, ..., reliability, method = c('AVG', 'MAX', 'MIN')) {
+SEM <- function(subject, trial, ..., reliability, method = c('AVG', 'MAX', 'MIN')) {
 
   #The inputs to this function are individual vectors, so here they are brought together into one data frame
-  df <- data.frame(subject, ...)
+  full_df <- data.frame(subject, trial, ...)
+
+  #This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
+  for (i in 3:ncol(full_df)) {
+
+    metric <- full_df[, i]
+
+    #Checks to make sure the metric vector is numeric, producing an informative error message if it is not
+    if (is.numeric(metric) == FALSE) {
+
+      print("Each metric column must be a numeric vector")
+
+    }
+
+    #Produces an informative error message if each athlete has not recorded exactly one measurement for each trial
+    if (length(unique(subject)) * length(unique(trial)) != length(metric)) {
+
+      print("Each athlete must have recorded the same number of trials")
+
+    }
+
+  }
+
+  #The trials are only needed for the error checking above, so they are deleted here
+  full_df <- data.frame(subject, ...)
 
   #Subject needs to be a factor variable in order for the next part to work
   subject <- as.factor(subject)
@@ -177,25 +226,25 @@ SEM <- function(subject, ..., reliability, method = c('AVG', 'MAX', 'MIN')) {
   if (method == 'AVG') {
 
     #The default is for the average value that each subject records to be included in the between-subject SD
-    df <- dplyr::group_by(df, subject)
-    df <- dplyr::summarise_if(df, is.numeric, mean)
+    df <- dplyr::group_by(full_df, subject)
+    df <- dplyr::summarise_if(full_df, is.numeric, mean)
 
   } else if (method == 'MAX') {
 
     #The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
-    df <- dplyr::group_by(df, subject)
-    df <- dplyr::summarise_if(df, is.numeric, max)
+    df <- dplyr::group_by(full_df, subject)
+    df <- dplyr::summarise_if(full_df, is.numeric, max)
 
   } else if (method == 'MIN') {
 
     #Otherwise, the lowest value that each subject records will be included in the between-subject SD
-    df <- dplyr::group_by(df, subject)
-    df <- dplyr::summarise_if(df, is.numeric, min)
+    df <- dplyr::group_by(full_df, subject)
+    df <- dplyr::summarise_if(full_df, is.numeric, min)
 
   }
 
-  #Calculates the sd of only the columns that correspond to the metrics (not the subject and trial columns)
-  SD_baseline <- lapply(df[, -1], stats::sd)
+  #Calculates the sd of only the columns that correspond to the metrics (not the subject column)
+  SD_baseline <- lapply(full_df[, -1], stats::sd)
 
   #Iterates over all items (i.e. all metrics) in the SD_baseline list created above
   for (i in seq_along(SD_baseline)) {
