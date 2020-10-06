@@ -4,7 +4,7 @@
 \alias{CV}
 \title{Coefficient of Variation (CV) for a set of athlete measurements, expressed as a percentage of the mean}
 \usage{
-CV(subject, ...)
+CV(subject, trial, ...)
 }
 \arguments{
 \item{subject}{The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)}

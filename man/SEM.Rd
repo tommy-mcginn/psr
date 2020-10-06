@@ -4,7 +4,7 @@
 \alias{SEM}
 \title{Standard Error of Measurement (SEM) for a set of athlete measurements}
 \usage{
-SEM(subject, ..., reliability, method = c("AVG", "MAX", "MIN"))
+SEM(subject, trial, ..., reliability, method = c("AVG", "MAX", "MIN"))
 }
 \arguments{
 \item{subject}{The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)}
