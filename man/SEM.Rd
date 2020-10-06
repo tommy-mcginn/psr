@@ -12,16 +12,14 @@ SEM(subject, trial, ..., reliability, method = c("AVG", "MAX", "MIN"))
 \item{...}{Numeric vectors that represent the metrics for which the SEM should be computed. These vectors hold the scores that
 each athlete recorded for each respective metric (at least one metric must be passed to the function).}
 
-\item{reliability}{A vector of the measures of reliability (i.e. the ICC's) for each of the metrics included in the "..."
-argument. It is suggested that the reliability measure chosen be the ICC, but it can be any reliability measure, as long as the
-measure chosen lies on a 0-1 scale (with 1 indicating higher reliability). This vector must contain the same number of
-elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values must
-appear in the same order as the metrics appear in the "..." argument.}
-
 \item{method}{The user's choice of how the between-athlete SD should be computed in the formula for the SEM. If set to AVG, each
 athlete's values will be averaged before the SD of these between-athlete averages is computed. If MAX is selected, then only
 the highest value each athlete records will be included in the computation of the between-athlete SD. Conversely, if the user
 indicates MIN, then only the lowest value each athlete records will be used to compute the between-athlete SD.}
+
+\item{ICC}{A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same number of
+elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values must
+appear in the same order as the metrics appear in the "..." argument.}
 }
 \value{
 A table, with each metric being its own column and its entry being the SEM of that metric, is the output of this function

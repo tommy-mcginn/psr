@@ -21,7 +21,6 @@
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
 #' LoA(subject, trial, metric_1, metric_2, metric_3, confidence = 0.95)
 #'
-#'
 #' @source Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
 #'
 #' @export

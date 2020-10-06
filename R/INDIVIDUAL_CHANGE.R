@@ -14,6 +14,7 @@
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
@@ -23,7 +24,7 @@
 #'   Science and a Need for Change. Sports, 5(4), 87.
 #'
 #' @export
-SWC <- function(subject, ..., method = c('AVG', 'MAX', 'MIN')) {
+SWC <- function(subject, trial, ..., method = c('AVG', 'MAX', 'MIN')) {
 
   #The inputs to this function are individual vectors, so I bring them all together into one data frame
   full_df <- data.frame(subject, ...)
@@ -99,11 +100,12 @@ SWC <- function(subject, ..., method = c('AVG', 'MAX', 'MIN')) {
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' reliability <- c(0.92, 0.98, 0.95)
-#' MDC(subject, metric_1, metric_2, metric_3, reliability, confidence = 0.95, method = 'AVG')
+#' ICC <- c(0.92, 0.98, 0.95)
+#' MDC(subject, trial, metric_1, metric_2, metric_3, ICC, confidence = 0.95, method = 'AVG')
 #'
 #' @references Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of
 #'   Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.

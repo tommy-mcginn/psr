@@ -4,7 +4,7 @@
 \alias{SWC}
 \title{Smallest Worthwhile Change (SWC) for a set of athlete measurements}
 \usage{
-SWC(subject, ..., method = c("AVG", "MAX", "MIN"))
+SWC(subject, trial, ..., method = c("AVG", "MAX", "MIN"))
 }
 \arguments{
 \item{subject}{The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)}
