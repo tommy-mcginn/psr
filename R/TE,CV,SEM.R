@@ -153,7 +153,7 @@ CV <- function(subject, trial, ...) {
 #'   Relevant to Sports Medicine. Sports Medicine, 26(4), 217-238.
 #'
 #' @export
-SEM <- function(subject, trial, ..., reliability, method = c('AVG', 'MAX', 'MIN')) {
+SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
 
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, trial, ...)
@@ -170,8 +170,8 @@ SEM <- function(subject, trial, ..., reliability, method = c('AVG', 'MAX', 'MIN'
   # This data frame is created from the get-go, and it will be the output that is returned at the end
   output_df <- data.frame(Metric = paste("SEM"))
 
-  # Putting the reliability vector that is the final function argument is helpful to make its format consistent with SD_baseline
-  reliability <- as.list(reliability)
+  # Putting the vector of ICC's that is the penultimate function argument is helpful to make its format consistent with SD_baseline
+  ICC <- as.list(ICC)
 
   # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
   if (method == 'AVG') {
@@ -201,7 +201,7 @@ SEM <- function(subject, trial, ..., reliability, method = c('AVG', 'MAX', 'MIN'
   for (i in seq_along(SD_baseline)) {
 
     # The SEM for each metric is computed, according to its proper formula, and stored in a list
-    SEM = SD_baseline[[i]] * sqrt(1 - reliability[[i]])
+    SEM = SD_baseline[[i]] * sqrt(1 - ICC[[i]])
 
     # Places the SEM values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(SEM))
