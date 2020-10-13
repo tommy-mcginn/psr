@@ -26,11 +26,11 @@ TE <- function(subject, trial, ...) {
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, trial, ...)
 
-  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
-  check_error(full_df)
-
   # This data frame is created from the get-go, and it will be the output that is returned at the end
   output_df <- data.frame(Metric = paste("TE"))
+
+  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
+  check_error(subject, trial, ...)
 
   # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
   for (i in 3:ncol(full_df)) {
