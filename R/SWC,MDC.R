@@ -66,7 +66,7 @@ SWC <- function(subject, trial, ..., method = c('AVG', 'MAX', 'MIN')) {
   for (i in seq_along(sd_btwn)) {
 
     #Creates Smallest Worthwhile Change for each item in sd_best (the double brackets refer to an item in a list)
-    SWC = effect_size * sd_btwn[[i]]
+    SWC = 0.2 * sd_btwn[[i]]
 
     #Places the SWC values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(SWC))
@@ -130,7 +130,7 @@ MDC <- function(subject, trial, ..., ICC, confidence = 0.95, method = c('AVG', '
   ICC <- as.list(ICC)
 
   #This line turns the alpha value the user passed to the function into the critical value for which we use it later in the function
-  crit_val <- stats::qt((1 + confidence) / 2)
+  crit_val <- stats::qnorm((1 + confidence) / 2)
 
   #This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
   if (method == 'AVG') {

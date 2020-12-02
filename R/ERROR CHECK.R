@@ -14,7 +14,7 @@ check_error <- function(subject, trial, ...) {
     # Checks to make sure the metric vector is numeric, producing an informative error message if it is not
     if (is.numeric(metric) == FALSE) {
 
-      print("Each metric column must be a numeric vector")
+      print("Each metric must be numeric")
 
       stop()
 
@@ -22,10 +22,23 @@ check_error <- function(subject, trial, ...) {
 
   }
 
-  # Produces an informative error message if each athlete has not recorded exactly one measurement for each trial
+  # Produces an informative error message if each athlete has not recorded a measurement for each trial that appears in the data
   if (length(unique(subject)) * length(unique(trial)) != nrow(df)) {
 
-    print("Each athlete must have recorded the same number of trials")
+    print("Each athlete must have recorded a measurement for each trial")
+
+    stop()
+
+  }
+
+  # Produces an informative error message if any athlete has recorded two or more measurements for any trial
+  data <- data.frame(subject, trial, ...)
+
+  data <- count(data, subject, trial)
+
+  if (length(unique(data$n)) != 1) {
+
+    print("Each athlete must not have recorded multiple measurements for any trial")
 
     stop()
 
