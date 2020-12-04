@@ -83,7 +83,7 @@ CV <- function(subject, trial, ...) {
   full_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
-  check_error(full_df)
+  check_error(subject, trial, ...)
 
   # We don't need the trials after the above error checking, so they are deleted from the full data frame
   full_df <- full_df[, -2]
@@ -159,7 +159,7 @@ SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
   full_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
-  check_error(full_df)
+  check_error(subject, trial, ...)
 
   # The trials are only needed for the error checking above, so they are deleted here
   full_df <- data.frame(subject, ...)

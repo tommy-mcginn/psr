@@ -21,16 +21,19 @@
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' SWC(subject, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
+#' SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
 #'
 #' @references Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport
 #'   Science and a Need for Change. Sports, 5(4), 87.
 #'
 #' @export
-SWC <- function(subject, trial, ..., method = c('AVG', 'MAX', 'MIN')) {
+SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX', 'MIN')) {
 
   #The inputs to this function are individual vectors, so I bring them all together into one data frame
   full_df <- data.frame(subject, ...)
+
+  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
+  check_error(subject, trial, ...)
 
   #Subject needs to be a factor variable in order for the next part to work
   subject <- as.factor(subject)
@@ -66,7 +69,7 @@ SWC <- function(subject, trial, ..., method = c('AVG', 'MAX', 'MIN')) {
   for (i in seq_along(sd_btwn)) {
 
     #Creates Smallest Worthwhile Change for each item in sd_best (the double brackets refer to an item in a list)
-    SWC = 0.2 * sd_btwn[[i]]
+    SWC = effect_size * sd_btwn[[i]]
 
     #Places the SWC values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(SWC))
@@ -117,58 +120,61 @@ SWC <- function(subject, trial, ..., method = c('AVG', 'MAX', 'MIN')) {
 #' @export
 MDC <- function(subject, trial, ..., ICC, confidence = 0.95, method = c('AVG', 'MAX', 'MIN')) {
 
-  #The inputs to this function are individual vectors, so here they are brought together into one data frame
+  # The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, ...)
 
-  #Subject needs to be a factor variable in order for the next part to work
+  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
+  check_error(subject, trial, ...)
+
+  # Subject needs to be a factor variable in order for the next part to work
   subject <- as.factor(subject)
 
-  #This data frame is created from the get-go, and it will be the output that is returned at the end
+  # This data frame is created from the get-go, and it will be the output that is returned at the end
   output_df <- data.frame(Metric = paste("MDC"))
 
-  #Putting the reliability vector that is the final function argument is helpful to make its format consistent with SD_baseline
+  # Putting the reliability vector that is the final function argument is helpful to make its format consistent with SD_baseline
   ICC <- as.list(ICC)
 
-  #This line turns the alpha value the user passed to the function into the critical value for which we use it later in the function
+  # This line turns the alpha value the user passed to the function into the critical value for which we use it later in the function
   crit_val <- stats::qnorm((1 + confidence) / 2)
 
-  #This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
+  # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
   if (method == 'AVG') {
 
-    #The default is for the average value that each subject records to be included in the between-subject SD
+    # The default is for the average value that each subject records to be included in the between-subject SD
     df <- dplyr::group_by(full_df, subject)
     df <- dplyr::summarise_if(full_df, is.numeric, mean)
 
   } else if (method == 'MAX') {
 
-    #The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
+    # The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
     df <- dplyr::group_by(full_df, subject)
     df <- dplyr::summarise_if(full_df, is.numeric, max)
 
   } else if (method == 'MIN') {
 
-    #Otherwise, the lowest value that each subject records will be included in the between-subject SD
+    # Otherwise, the lowest value that each subject records will be included in the between-subject SD
     df <- dplyr::group_by(full_df, subject)
     df <- dplyr::summarise_if(full_df, is.numeric, min)
 
   }
 
-  #Calculates the sd of only the columns that correspond to the metrics (not the subject column)
+  # Calculates the sd of only the columns that correspond to the metrics (not the subject column)
   SD_btwn <- lapply(full_df[, -1], stats::sd)
 
-  #Iterates over all items (i.e. all metrics) in the SD_baseline list created above
+  # Iterates over all items (i.e. all metrics) in the SD_baseline list created above
   for (i in seq_along(SD_btwn)) {
 
-    #The SED for each metric is computed, according to its proper formula, and stored in a list
+    # The SED for each metric is computed, according to its proper formula, and stored in a list
     MDC = SD_btwn[[i]] * sqrt(2) * sqrt(1 - ICC[[i]]) * crit_val
 
-    #Places the MDC values into a table and names each row of the table by its metric, which makes for clean output
+    # Places the MDC values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(MDC))
     colnames(output_df)[i + 1] <- colnames(df)[i + 1]
 
-    #I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
-    print.data.frame(output_df, row.names = FALSE)
-
   }
+
+  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  print.data.frame(output_df, row.names = FALSE)
 
 }

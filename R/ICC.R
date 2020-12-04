@@ -26,28 +26,34 @@
 #' @export
 ICC <- function(subject, trial, ...) {
 
-  #The inputs to this function are individual vectors, so here they are brought together into one data frame
+  # The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, trial, ...)
 
-  #This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
+  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
+  check_error(subject, trial, ...)
+
+  # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
   for (i in 3:nargs()) {
 
-    #For each loop, we want to make a new dataset (data1) with only three columns: Subject, Trial, and the ith metric in the for loop
+    # For each loop, we want to make a new dataset (part_df) with only three columns: Subject, Trial, and the ith metric in the for loop
     part_df <- full_df[, c(1, 2, i)]
 
-    #Converts the data frame to the wide format needed to use the ICC function from the psych package later on
+    # Converts the data frame to the wide format needed to use the ICC function from the psych package later on
     part_df <- tidyr::pivot_wider(part_df, names_from = trial, values_from = colnames(full_df)[i])
 
-    #The vector of subjects must not be part of the data frame in order to use the ICC function from the psych package
+    # The vector of subjects must not be part of the data frame in order to use the ICC function from the psych package
     part_df <- part_df[, -1]
 
-    #Computes the ICC for the given metric
+    # Computes the ICC for the given metric
     ICC = psych::ICC(part_df)
 
-    #Names each item of the list properly, as the ICC Output of its respective metric
+    # Puts this ICC output into a list
+    list_ICC <- list(ICC)
+
+    # Names each item of the list properly, as the ICC Output of its respective metric
     names(list_ICC) <- colnames(full_df)[i]
 
-    #We must specifically print the list in order to see all of its contents when making it inside of a for loop as we have done here
+    # We must specifically print the list in order to see all of its contents when making it inside of a for loop as we have done here
     print(list_ICC)
 
   }

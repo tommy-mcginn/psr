@@ -16,36 +16,40 @@
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' STEN(metric_1, metric_2, metric_3)
+#' STEN(subject, trial, metric_1, metric_2, metric_3)
 #'
 #' @export
-STEN <- function(subject, ...) {
+STEN <- function(subject, trial, ...) {
 
-  #The inputs to this function are individual vectors, so I bring them all together into one data frame
+  # The inputs to this function are individual vectors, so I bring them all together into one data frame
   full_df <- data.frame(subject, ...)
 
-  #A new data frame is created that will store the STEN values of each metric and will be the function output
+  # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
+  check_error(subject, trial, ...)
+
+  # A new data frame is created that will store the STEN values of each metric and will be the function output
   output_df <- data.frame(subject)
 
-  #Iterates over all of the arguments that correspond to the metrics passed to the function (all but the first "subject" argument)
-  for (i in 2:nargs()) {
+  # Iterates over all of the arguments that correspond to the metrics passed to the function (all but the first "subject" argument)
+  for (i in 3:nargs()) {
 
-    #Each metric is the ith column of the first data frame created (ensures we only affect the metrics, not the subject)
-    metric <- full_df[, i]
+    # Each metric is the ith column of the first data frame created (ensures we only affect the metrics, not the subject)
+    metric <- full_df[, i - 1]
 
-    #The formula to convert the actual scores to the STEN scores is applied here, with the results rounded to 2 decimals
-    STEN_metric <- round((((metric - mean(metric)) / sd(metric)) * 2) + 5.5, digits = 2)
+    # The formula to convert the actual scores to the STEN scores is applied here, with the results rounded to 2 decimals
+    STEN <- round((((metric - mean(metric)) / sd(metric)) * 2) + 5.5, digits = 2)
 
-    #These scores for each metric are added to the second data frame created, and named according to the metric they represent
-    output_df <- cbind(output_df, STEN_metric)
-    colnames(output_df)[i] <- colnames(full_df)[i]
+    # These scores for each metric are added to the second data frame created, and named according to the metric they represent
+    output_df <- cbind(output_df, unlist(STEN))
+    colnames(output_df)[i - 1] <- colnames(full_df)[i - 1]
 
   }
 
-  #I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
   print.data.frame(output_df, row.names = FALSE)
 
 }
