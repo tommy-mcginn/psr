@@ -1,15 +1,15 @@
 ---
-title: "An Updated Version of the ICC function in the psych package"
+title: "A New and Improved Version of psych::ICC"
 author: "Tommy McGinn"
 date: "7/13/20"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{An Updated Version of the ICC function in the psych package}
+  %\VignetteIndexEntry{A New and Improved Version of psych::ICC}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-#Different Argument Forms
+# Different Argument Forms
 
 The ICC function in the psych package takes entire data as its only input. In addition, it also requires that the data be in the "wide" form, so that each subject is its own row, the trials represent the columns, and each subject's measurement from each trial fills in the entries of the data. A table in this "wide" form of data looks like this:
 
@@ -35,7 +35,7 @@ In reality many data are actually in "long" form, so that there are multiple row
 
 The ICC function in the PerfSciReliability package explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" format (using the pivot_wider function in the tidyr package), so that the ICC function from the psych package can be run on each metric, displaying the same output that the ICC function from the psych package would display. In other words, our ICC function is a "wrapper" function for that in the psych package, which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in whatever format, as long as the user can properly extract these vectors from the data.
 
-#Allowing Any Number of Metrics
+# Allowing Any Number of Metrics
 
 An extension of the difference described in the previous section is the fact that the ICC function in the PerfSciReliability package allows for the simultaneous computation of the ICC for multiple metrics, however many the user wants, whereas the ICC function in the psych package is limited in that, as it takes as its input data in "wide" format, it can only calculate the ICC for one metric at a time, due to the fact that data in "wide" format by construction include only the measurements of one metric.
 
