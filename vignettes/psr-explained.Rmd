@@ -1,7 +1,7 @@
 ---
-title: "Intro to psr"
+title: "psr Explained"
 author: "Tommy McGinn"
-date: "12/18/2020"
+date: "12/23/2020"
 output: html_document
 ---
 
@@ -85,14 +85,72 @@ Running the code, the familiar form of the output is displayed:
 
 # Reliability of Measurement Instrument
 
-You can also embed plots, for example:
+There are a couple of functions to measure the reliability of the measurement instrument from which the data comes. The main function that achieves this purpose is ICC(). This function is similar to psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()).
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+The ICC is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC() prints the ICC values of all six forms.
+
+To illustrate ICC() at work, the same example as above can be employed:
+
+```{r}
+ICC(subject, trial, metric_1, metric_2, metric_3)
 ```
+
+The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
+
+```{r}
+
+```
+
+The output above is simply a list of the ICC's for each metric. ... The choice of which ICC form to use for the data entered is left to the user.
 
 # Setting Benchmarks for Athletes (What Constitutes Reliable Change?)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+There are a couple of functions that allow practitioners to set benchmarks for athletes: the SWC and the MDC. The RCI is an extension of the MDC and also appears in our package.
+
+## SWC()
+
+The SWC is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2):
+
+[Insert image of formula here]
+
+The larger the effect size the user desires, the larger the value of the SWC will be. Another source of user input is the values to be used when computing the between-athlete standard deviation. This method argument takes either 'MIN', 'MAX', or 'AVG', as described in the SEM() section earlier in this vignette. Using the same data as previously, the output looks as follows:
+
+```{r}
+SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
+```
+
+```{r}
+# Metric metric_1   metric_2 metric_3
+#    SWC 4.192189 0.04380639 32.61985
+```
+
+The interpretation for this output is as follows: in order for an athlete in the data to improve by a worthwhile amount, he or she would need to improve by 4.19 units for metric_1, 0.04 units for metric_2, and 32.62 units for metric_3, respectively.
+
+## Comparing the TE to the SWC
+
+Another way of determining whether or not a measurement instrument is reliable is by comparing its TE values to its SWC values for each metric. If the TE is greater than the SWC for a metric, then the instrument is considered to be unreliable, as one could not be certain that an improvement equal to the SWC is worthwhile change, or rather is just error. Unsurprisingly, a practitioner should desire a TE that is less than the SWC for every metric.
+
+For the data utilized in the preceding sections, the TE is much greater than the SWC for every metric. This is a red flag that the measurement instrument being used in this data is not reliable for any of the three metrics, so one cannot be confident that the SWC represents a worthwhile change and not just error.
+
+## MDC()
+
+Another way of quantifying change that is larger than the size of error in the measurement instrument is the MDC. This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is in turn based on how confident the user wants to be that the MDC value generated cannot be explained solely by error. It is essentially a manifestation of how large of a change would need to occur in order for it to be statistically significant. The formula for the MDC is:
+
+[Insert image of formula here]
+
+Using this formula with the usual data, the resulting output is:
+
+```{r}
+MDC(subject, trial, metric_1, metric_2, metric_3, ICC, confidence = 0.95, method = 'AVG')
+```
+
+```{r}
+# Metric metric_1   metric_2 metric_3
+#    MDC 16.43308 0.08585895 101.0881
+```
+
+There is one important thing to note from this output. The MDC is much larger than the SWC for each metric, which could be due to the fact that the measurement instrument is unreliable based on a comparison of the TE and the SWC. This confirms that a value larger than the SWC is needed for a change to be significant, which is provided by the MDC. The MDC is still smaller than the TE for all three metrics, however, which means that a change could be considered statistically significant but still the result of error, if the measurement instrument is extremely unreliable.
+
+## An Application of the MDC: RCI()
 
 # Standardizing Scores Across Athletes
