@@ -9,10 +9,6 @@ output: html_document
 
 This package is intended for coaches and analysts in the field of performance science. It is meant to allow its user to gain insight into metrics of both measurement reliability as well as individual change, given data from a set of athletes. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. Another theme pertains to determining the smallest change from the baseline needed to be considered meaningful. That is where the smallest worthwhile change (SWC) and minimal detectable change (MDC) enter the picture. One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function builds on the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
 
-```{r cars}
-summary(cars)
-```
-
 # Standard Error Within Athletes
 
 There are three different ways which psr offers to calculate the standard error between athletes: TE, CV, and SWC. 
@@ -141,7 +137,7 @@ Another way of quantifying change that is larger than the size of error in the m
 Using this formula with the usual data, the resulting output is:
 
 ```{r}
-MDC(subject, trial, metric_1, metric_2, metric_3, ICC, confidence = 0.95, method = 'AVG')
+MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95, method = 'AVG')
 ```
 
 ```{r}
@@ -153,4 +149,54 @@ There is one important thing to note from this output. The MDC is much larger th
 
 ## An Application of the MDC: RCI()
 
+One application of the MDC to the scores of individual athletes is the RCI. The RCI contains lower and upper bounds that quantify the specific measurement that each athlete would need to record in order for their change from a pre-defined baseline to be considered reliable, or not entirely the result of measurement error. If any of the athlete's future measurements are lower than the lower bound or higher than the upper bound, then that athlete has reliably improved (or regressed) from his or her baseline. RCI() takes similar arguments to MDC():
+
+```{r}
+RCI(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95, baseline = which(trial == "Trial 1"))
+```
+
+RCI() substitutes the method argument in MDC() for a baseline argument instead, which mandates the user specify a specific set of measurements that should serve as the baseline for the computation of the RCI. The method argument is needed in MDC() to determine how the function should deal with each athlete potentially having multiple measurements in the data. This is not an issue in RCI(), as the specification of the baseline trial ensures that there is only one trial that is used to calculate the RCI.
+
+The output that results from running this function with the data used in the previous examples is shown below:
+
+```{r}
+# subject metric_1 RCI Min--metric_1 RCI Max--metric_1
+#       1      257          233.2939          280.7061
+#       2      275          251.2939          298.7061
+#       3      216          192.2939          239.7061
+# subject metric_2 RCI Min--metric_2 RCI Max--metric_2
+#       1     1.11         0.9879565         1.2320435
+#       2     1.37         1.2479565         1.4920435
+#       3     0.75         0.6279565         0.8720435
+# subject metric_3 RCI Min--metric_3 RCI Max--metric_3
+#       1     1272         1138.0765          1405.924
+#       2     1046          912.0765          1179.924
+#       3     1478         1344.0765          1611.924
+```
+
+Each metric has a separate data table, with the subject, his or her baseline measurement, and his or her lower ("RCI Min") and upper ("RCI Max") bounds as the columns, from left to right. The tables are separate to ensure that each table contains just four columns, rather than having one table that could be too wide to fit within the R Console (if the user wants to calculate the RCI for several metrics).   
+
 # Standardizing Scores Across Athletes
+
+The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection. Another key focus of practitioners could be analyzing how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the "Standard Ten" (STEN) scores of the athletes for each metric. The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
+
+```{r}
+STEN(subject, trial, metric_1, metric_2, metric_3)
+```
+
+It produces simple output that looks as follows for the same data that was used to demonstrate all of the previous functions:
+
+```{r}
+# subject   trial metric_1 metric_2 metric_3
+#       1 Trial 1     5.51     5.04     5.53
+#       1 Trial 2     6.56     6.23     8.24
+#       1 Trial 3     3.60     3.03     3.07
+#       2 Trial 1     7.23     7.42     2.75
+#       2 Trial 2     5.70     5.96     4.62
+#       2 Trial 3     6.08     6.78     4.21
+#       3 Trial 1     1.60     1.76     8.05
+#       3 Trial 2     8.37     7.87     6.73
+#       3 Trial 3     4.84     5.41     6.30
+```
+
+This output lends insight into how well each athlete performed on each trial, compared to all of the measurements recorded in the data for the same metric. One can see that subject 1 recorded mostly higher than average measurements for Trial 1 and Trial 2, but these measurements were lower than the average for all three metrics in Trial 3. In Trial 1, subject 2 recorded high measurements for metric 1 and metric 2 and a low measurement for metric 3 compared to his or her peers, while the opposite was the case for subject 3. This function makes it easy to see how each athlete is performing relative to the other athletes for a given trial and metric combination, and how this performance differs across trials and metrics, respectively.
