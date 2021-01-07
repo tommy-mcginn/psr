@@ -26,26 +26,26 @@
 STEN <- function(subject, trial, ...) {
 
   # The inputs to this function are individual vectors, so I bring them all together into one data frame
-  full_df <- data.frame(subject, ...)
+  full_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
   # A new data frame is created that will store the STEN values of each metric and will be the function output
-  output_df <- data.frame(subject)
+  output_df <- data.frame(subject, trial)
 
   # Iterates over all of the arguments that correspond to the metrics passed to the function (all but the first "subject" argument)
   for (i in 3:nargs()) {
 
     # Each metric is the ith column of the first data frame created (ensures we only affect the metrics, not the subject)
-    metric <- full_df[, i - 1]
+    metric <- full_df[, i]
 
     # The formula to convert the actual scores to the STEN scores is applied here, with the results rounded to 2 decimals
     STEN <- round((((metric - mean(metric)) / sd(metric)) * 2) + 5.5, digits = 2)
 
     # These scores for each metric are added to the second data frame created, and named according to the metric they represent
     output_df <- cbind(output_df, unlist(STEN))
-    colnames(output_df)[i - 1] <- colnames(full_df)[i - 1]
+    colnames(output_df)[i] <- colnames(full_df)[i]
 
   }
 

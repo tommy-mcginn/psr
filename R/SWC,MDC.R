@@ -135,7 +135,7 @@ MDC <- function(subject, trial, ..., ICC, confidence = 0.95, method = c('AVG', '
   # Putting the reliability vector that is the final function argument is helpful to make its format consistent with SD_baseline
   ICC <- as.list(ICC)
 
-  # This line turns the alpha value the user passed to the function into the critical value for which we use it later in the function
+  # This line turns the alpha value the user passed to the function into the critical value that we use later in the function
   crit_val <- stats::qnorm((1 + confidence) / 2)
 
   # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
@@ -170,7 +170,7 @@ MDC <- function(subject, trial, ..., ICC, confidence = 0.95, method = c('AVG', '
 
     # Places the MDC values into a table and names each row of the table by its metric, which makes for clean output
     output_df <- cbind(output_df, unlist(MDC))
-    colnames(output_df)[i + 1] <- colnames(df)[i + 1]
+    colnames(output_df)[i + 1] <- colnames(full_df)[i + 1]
 
   }
 

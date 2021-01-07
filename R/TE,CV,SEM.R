@@ -146,8 +146,7 @@ CV <- function(subject, trial, ...) {
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' ICC <- c(0.92, 0.98, 0.95)
-#' SEM(subject, trial, metric_1, metric_2, metric_3, ICC, method = 'AVG')
+#' SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), method = 'AVG')
 #'
 #' @references Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables
 #'   Relevant to Sports Medicine. Sports Medicine, 26(4), 217-238.
@@ -209,7 +208,7 @@ SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
 
   }
 
-  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
-  print.data.frame(output_df, row.names = FALSE)
+    # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+    print.data.frame(output_df, row.names = FALSE)
 
 }

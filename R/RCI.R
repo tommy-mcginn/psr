@@ -27,9 +27,8 @@
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' ICC <- c(0.92, 0.98, 0.95)
 #' baseline <- which(trial == "Trial 1")
-#' RCI(subject, trial, metric_1, metric_2, metric_3, ICC, baseline, confidence = 0.95)
+#' RCI(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), baseline, confidence = 0.95)
 #'
 #' @references Ferger, K., & Büsch, D. (2018). Individual measurement of performance change in sports. Deutsche Zeitschrift Für
 #'   Sportmedizin, 2018(02), 45-52.
