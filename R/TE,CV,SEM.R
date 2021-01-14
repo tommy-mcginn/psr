@@ -26,11 +26,11 @@ TE <- function(subject, trial, ...) {
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
   full_df <- data.frame(subject, trial, ...)
 
-  # This data frame is created from the get-go, and it will be the output that is returned at the end
-  output_df <- data.frame(Metric = paste("TE"))
-
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
+
+  # Creates a list into which the TE values will be placed
+  list_TE <- list()
 
   # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
   for (i in 3:ncol(full_df)) {
@@ -42,15 +42,22 @@ TE <- function(subject, trial, ...) {
     lm_TE <- stats::lm(metric ~ as.factor(subject) + as.factor(trial))
     TE = stats::sigma(lm_TE)
 
-    # Places the TE values into a table and names each row of the table by its metric, which makes for clean output
-    output_df <- cbind(output_df, unlist(TE))
-
-    # Sets the column names as the metrics that their TE values in the table represent
-    colnames(output_df)[i - 1] <- colnames(full_df)[i]
+    # Places the TE values into the list created earlier
+    list_TE <- append(list_TE, values = TE)
 
   }
 
-  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  # Converts the list to a data frame, which creates nicer output
+  output_df <- data.frame(matrix(unlist(list_TE), nrow = 1))
+
+  # The column names are assigned to be the metric names they represent
+  for (i in seq_along(output_df)) {
+
+    colnames(output_df)[i] <- colnames(full_df)[i + 2]
+
+  }
+
+  # The output data frame is printed
   print.data.frame(output_df, row.names = FALSE)
 
 }
