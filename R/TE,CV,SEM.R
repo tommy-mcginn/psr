@@ -159,20 +159,20 @@ CV <- function(subject, trial, ...) {
 #' @export
 SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
 
+  # The subject variable must be converted to a factor variable in order for the function to work
+  subject <- as.factor(subject)
+
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
-  full_df <- data.frame(subject, trial, ...)
+  input_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
   # The trials are only needed for the error checking above, so they are deleted here
-  full_df <- data.frame(subject, ...)
+  input_df <- data.frame(subject, ...)
 
-  # Subject needs to be a factor variable in order for the next part to work
-  subject <- as.factor(subject)
-
-  # This data frame is created from the get-go, and it will be the output that is returned at the end
-  output_df <- data.frame(Metric = paste("SEM"))
+  # Creates a list into which the SEM values will be placed
+  list_SEM <- list()
 
   # Putting the vector of ICC's that is the penultimate function argument is helpful to make its format consistent with SD_baseline
   ICC <- as.list(ICC)
@@ -181,25 +181,25 @@ SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
   if (method == 'AVG') {
 
     # The default is for the average value that each subject records to be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, mean)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, mean)
 
   } else if (method == 'MAX') {
 
     # The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, max)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, max)
 
   } else if (method == 'MIN') {
 
     # Otherwise, the lowest value that each subject records will be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, min)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, min)
 
   }
 
   # Calculates the sd of only the columns that correspond to the metrics (not the subject column)
-  SD_baseline <- lapply(full_df[, -1], stats::sd)
+  SD_baseline <- lapply(input_df[, -1], stats::sd)
 
   # Iterates over all items (i.e. all metrics) in the SD_baseline list created above
   for (i in seq_along(SD_baseline)) {
@@ -207,13 +207,22 @@ SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
     # The SEM for each metric is computed, according to its proper formula, and stored in a list
     SEM = SD_baseline[[i]] * sqrt(1 - ICC[[i]])
 
-    # Places the SEM values into a table and names each row of the table by its metric, which makes for clean output
-    output_df <- cbind(output_df, unlist(SEM))
-    colnames(output_df)[i + 1] <- colnames(full_df)[i + 1]
+    # Places the TE values into the list created earlier
+    list_SEM <- append(list_SEM, values = SEM)
 
   }
 
-    # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
-    print.data.frame(output_df, row.names = FALSE)
+  # Converts the list to a data frame, which creates nicer output
+  output_df <- data.frame(matrix(unlist(list_SEM), nrow = 1))
+
+  # The column names are assigned to be the metric names they represent
+  for (i in seq_along(output_df)) {
+
+    colnames(output_df)[i] <- colnames(input_df)[i + 1]
+
+  }
+
+  # The output data frame is printed
+  print.data.frame(output_df, row.names = FALSE)
 
 }
