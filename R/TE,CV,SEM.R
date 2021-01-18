@@ -24,7 +24,7 @@
 TE <- function(subject, trial, ...) {
 
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
-  full_df <- data.frame(subject, trial, ...)
+  input_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
@@ -33,10 +33,10 @@ TE <- function(subject, trial, ...) {
   list_TE <- list()
 
   # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
-  for (i in 3:ncol(full_df)) {
+  for (i in 3:ncol(input_df)) {
 
     # We say that "metric" is the ith column of the data frame for each iteration, then use it in the linear model that follows
-    metric <- full_df[, i]
+    metric <- input_df[, i]
 
     # The Typical Error is the residual standard error (which is what the sigma function computes) of the following regression
     lm_TE <- stats::lm(metric ~ as.factor(subject) + as.factor(trial))
@@ -53,7 +53,7 @@ TE <- function(subject, trial, ...) {
   # The column names are assigned to be the metric names they represent
   for (i in seq_along(output_df)) {
 
-    colnames(output_df)[i] <- colnames(full_df)[i + 2]
+    colnames(output_df)[i] <- colnames(input_df)[i + 2]
 
   }
 
@@ -62,12 +62,14 @@ TE <- function(subject, trial, ...) {
 
 }
 
-#' @title Coefficient of Variation (CV) for a set of athlete measurements, expressed as a percentage of the mean
+#' @title Coefficient of Variation (CV), or typical percentage error (as in Hopkins (2000)) for a set of athlete measurements,
+#'   expressed as a percentage
 #'
 #' @description Computes the CV for each vector of measurements that is passed to the function, for the vector of subjects in the
-#'   first argument
+#'   first argument and the vector of trials in the second argument
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
+#' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics for which the CV should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #'
@@ -87,45 +89,41 @@ TE <- function(subject, trial, ...) {
 CV <- function(subject, trial, ...) {
 
   # The inputs to this function are individual vectors, so here they brought together into one data frame
-  full_df <- data.frame(subject, trial, ...)
+  input_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
-  # We don't need the trials after the above error checking, so they are deleted from the full data frame
-  full_df <- full_df[, -2]
+  # Creates a list into which the CV values will be placed
+  list_CV <- list()
 
-  # The subject variable should be a factor variable, in order for the summarize_if function later to work
-  subject <- as.factor(subject)
+  # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
+  for (i in 3:ncol(input_df)) {
 
-  # This data frame is created from the get-go, and it will be the output that is returned at the end
-  output_df <- data.frame(Metric = paste("CV"))
+    # We say that "metric" is the ith column of the data frame for each iteration, then use it in the linear model that follows
+    metric <- input_df[, i]
 
-  # In order for the CV for the entire sample to be calculated, the within-subject sd and mean first need to be computed
-  full_df <- dplyr::group_by(full_df, subject)
-  CV_sd <- dplyr::summarise_if(full_df, is.numeric, stats::sd)
-  CV_mean <- dplyr::summarise_if(full_df, is.numeric, mean)
+    # The Typical Error is the residual standard error (which is what the sigma function computes) of the following regression
+    lm_TE <- stats::lm(metric ~ as.factor(subject) + as.factor(trial))
+    TE = stats::sigma(lm_TE)
+    CV = (TE/mean(metric)) * 100
 
-  # This for loop iterates over all of the metrics passed to the function as its arguments
-  for (i in 3:nargs()) {
-
-    # The CV for each individual is the sd divided by the mean, multiplied by 100 (which expresses it as a percentage)
-    CV_ind = (CV_sd[, i - 1] / CV_mean[, i - 1]) * 100
-
-    # First create the list to hold each individual's CV value for each metric, then append the individual CV values into it
-    list_CV_ind <- list()
-    list_CV_ind <- append(list_CV_ind, values = CV_ind)
-
-    # The CV for each metric for the entire group is simply the mean of the individual CV's for each metric
-    CV_group <- lapply(list_CV_ind, mean)
-
-    # Places the CV values into a table and names each row of the table by its metric, which makes for clean output
-    output_df <- cbind(output_df, unlist(CV_group))
-    colnames(output_df)[i - 1] <- colnames(full_df)[i - 1]
+    # Places the TE values into the list created earlier
+    list_CV <- append(list_CV, values = CV)
 
   }
 
-  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  # Converts the list to a data frame, which creates nicer output
+  output_df <- data.frame(matrix(unlist(list_CV), nrow = 1))
+
+  # The column names are assigned to be the metric names they represent
+  for (i in seq_along(output_df)) {
+
+    colnames(output_df)[i] <- colnames(input_df)[i + 2]
+
+  }
+
+  # The output data frame is printed
   print.data.frame(output_df, row.names = FALSE)
 
 }

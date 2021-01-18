@@ -9,13 +9,13 @@ output: html_document
 
 This package is intended for coaches and analysts in the field of performance science. It is meant to allow its user to gain insight into metrics of both measurement reliability as well as individual change, given data from a set of athletes. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. Another theme pertains to determining the smallest change from the baseline needed to be considered meaningful. That is where the smallest worthwhile change (SWC) and minimal detectable change (MDC) enter the picture. One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function builds on the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
 
-# Standard Error Within Athletes
+# Within-Athlete Variation
 
-There are three different ways which psr offers to calculate the standard error between athletes: TE, CV, and SWC. 
+There are three different ways which psr offers to calculate the standard error between athletes: TE, CV, and SEM. 
 
 ## TE()
 
-The typical error is the within-athlete standard deviation of the data, and it is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors. It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on.
+The typical error is the within-athlete variation of the athlete measurements in the data, and it is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors. It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on.
 
 As an example, one can use simple data of three different athletes performing three trials each:
 
@@ -35,15 +35,15 @@ TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 ```{r}
-# Metric metric_1  metric_2 metric_3
-#     TE 23.53248 0.2369951 134.7632
+# metric_1  metric_2 metric_3
+# 23.53248 0.2369951 134.7632
 ```
 
 The output is a neat table that reports the TE values of each of the three metrics. One issue that comes up, however, is that of interpreting these values. The TE for metric_3 is much larger than the TE for metric_2, but that is largely due to the fact that metric_3 is on a different scale than metric_2. How can one tell if the TE is high, low, or just right? The CV gives an answer to that question.
 
 ## CV()
 
-The coefficient of variation is similar to the TE, but it scales all sets of measurements to the same range, no matter the scale of the different measurements. It does this by first taking the within-athlete standard deviation of each measurement, and dividing this value by each athlete's mean measurement value. This leaves one CV for each athlete, for each metric. Finally, these CV's are averaged for each metric, yielding the CV for the metric that is reported to the user.
+The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. Hopkins (2000) denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
 
 Using the same data as in the TE() section above and running the code, one gets:
 
@@ -52,8 +52,8 @@ CV(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 ```{r}
-# Metric metric_1 metric_2 metric_3
-#     CV 7.823127 17.68113 9.615649
+# metric_1 metric_2 metric_3
+# 7.823127 17.68113 9.615649
 ```
 
 As one can see, the CV function yields a way of comparing across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable. This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable.
