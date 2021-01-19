@@ -27,7 +27,7 @@
 ICC <- function(subject, trial, ...) {
 
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
-  full_df <- data.frame(subject, trial, ...)
+  input_df <- data.frame(subject, trial, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
@@ -35,26 +35,18 @@ ICC <- function(subject, trial, ...) {
   # This for loop iterates over the arguments passed to the function that represent the measurements for the various metrics
   for (i in 3:nargs()) {
 
-    # For each loop, we want to make a new dataset (part_df) with only three columns: Subject, Trial, and the ith metric in the for loop
-    part_df <- full_df[, c(1, 2, i)]
+    # For each loop, we want to make a new dataset with only three columns: subject, trial, and the ith metric in the for loop
+    df <- input_df[, c(1, 2, i)]
 
     # Converts the data frame to the wide format needed to use the ICC function from the psych package later on
-    part_df <- tidyr::pivot_wider(part_df, names_from = trial, values_from = colnames(full_df)[i])
+    df <- tidyr::pivot_wider(df, names_from = trial, values_from = colnames(input_df)[i])
 
     # The vector of subjects must not be part of the data frame in order to use the ICC function from the psych package
-    part_df <- part_df[, -1]
+    df <- df[, -1]
 
-    # Computes the ICC for the given metric
-    ICC = psych::ICC(part_df)
-
-    # Puts this ICC output into a list
-    list_ICC <- list(ICC)
-
-    # Names each item of the list properly, as the ICC Output of its respective metric
-    names(list_ICC) <- colnames(full_df)[i]
-
-    # We must specifically print the list in order to see all of its contents when making it inside of a for loop as we have done here
-    print(list_ICC)
+    # Computes the ICC for the metric and prints it
+    ICC = psych::ICC(df)
+    print(ICC)
 
   }
 

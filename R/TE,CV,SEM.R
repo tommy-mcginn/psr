@@ -151,13 +151,13 @@ CV <- function(subject, trial, ...) {
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), method = 'AVG')
+#' SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95))
 #'
 #' @references Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables
 #'   Relevant to Sports Medicine. Sports Medicine, 26(4), 217-238.
 #'
 #' @export
-SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
+SEM <- function(subject, trial, ..., ICC) {
 
   # The subject variable must be converted to a factor variable in order for the function to work
   subject <- as.factor(subject)
@@ -171,43 +171,26 @@ SEM <- function(subject, trial, ..., ICC, method = c('AVG', 'MAX', 'MIN')) {
   # The trials are only needed for the error checking above, so they are deleted here
   input_df <- data.frame(subject, ...)
 
-  # Creates a list into which the SEM values will be placed
+  # Creates lists into which the SD and SEM values, respectively, will be placed
+  list_SD <- list()
   list_SEM <- list()
 
   # Putting the vector of ICC's that is the penultimate function argument is helpful to make its format consistent with SD_baseline
   ICC <- as.list(ICC)
 
-  # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
-  if (method == 'AVG') {
+  for (i in 2:ncol(input_df)) {
 
-    # The default is for the average value that each subject records to be included in the between-subject SD
-    input_df <- dplyr::group_by(input_df, subject)
-    input_df <- dplyr::summarise_if(input_df, is.numeric, mean)
-
-  } else if (method == 'MAX') {
-
-    # The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
-    input_df <- dplyr::group_by(input_df, subject)
-    input_df <- dplyr::summarise_if(input_df, is.numeric, max)
-
-  } else if (method == 'MIN') {
-
-    # Otherwise, the lowest value that each subject records will be included in the between-subject SD
-    input_df <- dplyr::group_by(input_df, subject)
-    input_df <- dplyr::summarise_if(input_df, is.numeric, min)
+    # Calculates the sd of each of the metric columns (not the subject column) and places it into the SD list
+    SD = stats::sd(input_df[, i])
+    list_SD <- append(list_SD, values = SD)
 
   }
 
-  # Calculates the sd of only the columns that correspond to the metrics (not the subject column)
-  SD_baseline <- lapply(input_df[, -1], stats::sd)
+  # Iterates over all items (i.e. all metrics) in the SD list created above
+  for (i in seq_along(list_SD)) {
 
-  # Iterates over all items (i.e. all metrics) in the SD_baseline list created above
-  for (i in seq_along(SD_baseline)) {
-
-    # The SEM for each metric is computed, according to its proper formula, and stored in a list
-    SEM = SD_baseline[[i]] * sqrt(1 - ICC[[i]])
-
-    # Places the TE values into the list created earlier
+    # The SEM for each metric is computed, according to its proper formula, and placed into the SEM list
+    SEM = list_SD[[i]] * sqrt(1 - ICC[[i]])
     list_SEM <- append(list_SEM, values = SEM)
 
   }
