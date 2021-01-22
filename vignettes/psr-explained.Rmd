@@ -53,7 +53,7 @@ CV(subject, trial, metric_1, metric_2, metric_3)
 
 ```{r}
 # metric_1 metric_2 metric_3
-# 7.823127 17.68113 9.615649
+# 9.160569 20.43061  10.6122
 ```
 
 As one can see, the CV function yields a way of comparing across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable. This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable.
@@ -67,10 +67,10 @@ The SEM is similar to the CV, but has one key difference: it utilizes the ICC, w
 Running the code for SEM(), using the same data as in the case of the TE() and CV():
 
 ```{r}
-SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), method = 'AVG')
+SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95))
 ```
 
-SEM() adds two additional arguments to those in TE() and CV(). The first is a list of the individual ICC values for the metrics (which must be entered in order), while the second is a way of indicating whether the user desires the baseline standard deviation of the athletes should be computed using the average, maximum, or minimum value of each athlete. The most common way is by using the average value of each athlete as above ('AVG'), but one can also use the maximum ('MAX') or minimum ('MIN') values.
+As noted earlier, SEM() adds one additional argument to those in TE() and CV(). This addition is a list of the individual ICC values for the metrics, which must be entered in order. In the above example, the ICC values for metric_1, metric_2, and metric_3 are 0.92, 0.98, and 0.95, respectively.
 
 Running the code, the familiar form of the output is displayed:
 
