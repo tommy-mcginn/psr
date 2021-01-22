@@ -162,9 +162,6 @@ SEM <- function(subject, trial, ..., ICC) {
   # The subject variable must be converted to a factor variable in order for the function to work
   subject <- as.factor(subject)
 
-  # The inputs to this function are individual vectors, so here they are brought together into one data frame
-  input_df <- data.frame(subject, trial, ...)
-
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
@@ -178,18 +175,17 @@ SEM <- function(subject, trial, ..., ICC) {
   # Putting the vector of ICC's that is the penultimate function argument is helpful to make its format consistent with SD_baseline
   ICC <- as.list(ICC)
 
+  # Calculates the sd of each of the metric columns (not the subject column) and places it into the SD list
   for (i in 2:ncol(input_df)) {
 
-    # Calculates the sd of each of the metric columns (not the subject column) and places it into the SD list
     SD = stats::sd(input_df[, i])
     list_SD <- append(list_SD, values = SD)
 
   }
 
-  # Iterates over all items (i.e. all metrics) in the SD list created above
+  # Iterates over all items (i.e. all metrics) in the SD list created above, and uses them to compute the SWC for each metric
   for (i in seq_along(list_SD)) {
 
-    # The SEM for each metric is computed, according to its proper formula, and placed into the SEM list
     SEM = list_SD[[i]] * sqrt(1 - ICC[[i]])
     list_SEM <- append(list_SEM, values = SEM)
 

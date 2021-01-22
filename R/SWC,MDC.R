@@ -29,55 +29,61 @@
 #' @export
 SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX', 'MIN')) {
 
-  #The inputs to this function are individual vectors, so I bring them all together into one data frame
-  full_df <- data.frame(subject, ...)
+  # The subject variable must be converted to a factor variable in order for the function to work
+  subject <- as.factor(subject)
+
+  # The inputs to this function are individual vectors, so I bring them all together into one data frame
+  input_df <- data.frame(subject, ...)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
-  #Subject needs to be a factor variable in order for the next part to work
-  subject <- as.factor(subject)
+  # Creates lists into which the SWC values will be placed
+  list_SWC <- list()
 
-  #This data frame is created from the get-go, and it will be the output that is returned at the end
-  output_df <- data.frame(Metric = paste("SWC"))
-
-  #This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
+  # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
+  # The default is for the average value that each subject records to be included in the between-subject SD
   if (method == 'AVG') {
 
-    #The default is for the average value that each subject records to be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, mean)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, mean)
 
+  # The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
   } else if (method == 'MAX') {
 
-    #The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, max)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, max)
 
+  # Otherwise, the lowest value that each subject records will be included in the between-subject SD
   } else if (method == 'MIN') {
 
-    #Otherwise, the lowest value that each subject records will be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, min)
+    input_df <- dplyr::group_by(input_df, subject)
+    input_df <- dplyr::summarise_if(input_df, is.numeric, min)
 
   }
 
-  #This line calculates the standard deviation of all of the columns (i.e. the between-subject SD of the best scores)
-  sd_btwn = lapply(full_df[, -1], stats::sd)
+  # Calculates the standard deviation of each metric column (i.e. the between-subject standard deviation of the scores)
+  SD = lapply(input_df[, -1], stats::sd)
 
-  #A for loop, iterating over all items in sd_best created above
-  for (i in seq_along(sd_btwn)) {
+  # Iterates over all items (i.e. all metrics) in the SD list created above, and uses them to compute the SWC for each metric
+  for (i in seq_along(SD)) {
 
-    #Creates Smallest Worthwhile Change for each item in sd_best (the double brackets refer to an item in a list)
-    SWC = effect_size * sd_btwn[[i]]
-
-    #Places the SWC values into a table and names each row of the table by its metric, which makes for clean output
-    output_df <- cbind(output_df, unlist(SWC))
-    colnames(output_df)[i + 1] <- colnames(df)[i + 1]
+    SWC = effect_size * SD[[i]]
+    list_SWC <- append(list_SWC, values = SWC)
 
   }
 
-  #I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  # Converts the list to a data frame, which creates tidier output
+  output_df <- data.frame(matrix(unlist(list_SWC), nrow = 1))
+
+  # The column names are assigned to be the metric names they represent
+  for (i in seq_along(output_df)) {
+
+    colnames(output_df)[i] <- colnames(input_df)[i + 1]
+
+  }
+
+  # The output data frame is printed
   print.data.frame(output_df, row.names = FALSE)
 
 }

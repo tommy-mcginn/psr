@@ -15,7 +15,7 @@ There are three different ways which psr offers to calculate the standard error 
 
 ## TE()
 
-The typical error is the within-athlete variation of the athlete measurements in the data, and it is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors. It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on.
+The typical error is the within-athlete variation of the athlete measurements in the data, and it is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors, as described in Hopkins (2000). It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on.
 
 As an example, one can use simple data of three different athletes performing three trials each:
 
@@ -43,7 +43,7 @@ The output is a neat table that reports the TE values of each of the three metri
 
 ## CV()
 
-The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. Hopkins (2000) denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
+The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing explanations of the CV in the literature, and this package chooses to follow the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
 
 Using the same data as in the TE() section above and running the code, one gets:
 
