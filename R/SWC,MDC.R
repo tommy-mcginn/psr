@@ -101,7 +101,6 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #'   0-1 scale (with 1 indicating higher reliability). This vector must contain the same number of elements as the number of metrics
 #'   that have been passed to the function in the "..." argument, and the reliability values must appear in the same order as the
 #'   metrics appear in the "..." argument.
-#' @param baseline The measurements to be considered the "baseline" results for the calculation of the RCI
 #' @param confidence The degree of confidence the user wants to have that an improvement exceeding the MDC can be interpreted as
 #'   real change, and not the result of measurement error. Set to a default value of 0.95, this parameter is used to calculate the
 #'   corresponding critical value from the standard normal distribution to which we compare the RCI.
@@ -114,14 +113,13 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' baseline <- which(trial == "Trial 1")
-#' MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), baseline, confidence = 0.95)
+#' MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95)
 #'
 #' @references Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of
 #'   Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
 #'
 #' @export
-MDC <- function(subject, trial, ..., ICC, baseline, confidence = 0.95) {
+MDC <- function(subject, trial, ..., ICC, confidence = 0.95) {
 
   # The subject variable must be converted to a factor variable in order for the function to work
   subject <- as.factor(subject)
@@ -131,9 +129,6 @@ MDC <- function(subject, trial, ..., ICC, baseline, confidence = 0.95) {
 
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
   input_df <- data.frame(subject, ...)
-
-  # We care only about the results of the trial we labeled as the "initial trial" in the function arguments
-  input_df <- input_df[c(baseline), ]
 
   # Creates lists into which the SD and MDC values, respectively, will be placed
   list_SD <- list()

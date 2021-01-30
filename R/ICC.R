@@ -44,9 +44,13 @@ ICC <- function(subject, trial, ...) {
     # The vector of subjects must not be part of the data frame in order to use the ICC function from the psych package
     df <- df[, -1]
 
-    # Computes the ICC for the metric and prints it
+    # Computes the ICC for the metric and converts it into a list
     ICC = psych::ICC(df)
-    print(ICC)
+    list_ICC <- list(ICC)
+
+    # Names each item in the list according to the name of its metric, and then prints it
+    names(list_ICC) <- colnames(input_df)[i]
+    print(list_ICC)
 
   }
 
