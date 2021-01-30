@@ -165,17 +165,17 @@ SEM <- function(subject, trial, ..., ICC) {
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
-  # The trials are only needed for the error checking above, so they are deleted here
+  # The inputs to this function are individual vectors, so here they are brought together into one data frame
   input_df <- data.frame(subject, ...)
 
   # Creates lists into which the SD and SEM values, respectively, will be placed
   list_SD <- list()
   list_SEM <- list()
 
-  # Putting the vector of ICC's that is the penultimate function argument is helpful to make its format consistent with SD_baseline
+  # Putting the vector of ICC's into a list is helpful to make its format consistent with list_SD and list_SEM
   ICC <- as.list(ICC)
 
-  # Calculates the sd of each of the metric columns (not the subject column) and places it into the SD list
+  # Calculates the sd of each of the metric columns (not the subject column) and places it into list_SD
   for (i in 2:ncol(input_df)) {
 
     SD = stats::sd(input_df[, i])

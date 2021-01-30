@@ -101,13 +101,10 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #'   0-1 scale (with 1 indicating higher reliability). This vector must contain the same number of elements as the number of metrics
 #'   that have been passed to the function in the "..." argument, and the reliability values must appear in the same order as the
 #'   metrics appear in the "..." argument.
+#' @param baseline The measurements to be considered the "baseline" results for the calculation of the RCI
 #' @param confidence The degree of confidence the user wants to have that an improvement exceeding the MDC can be interpreted as
 #'   real change, and not the result of measurement error. Set to a default value of 0.95, this parameter is used to calculate the
 #'   corresponding critical value from the standard normal distribution to which we compare the RCI.
-#' @param method The user's choice of how the between-athlete SD should be computed in the formula for the MDC. If set to AVG, each
-#'   athlete's values will be averaged before the SD of these between-athlete averages is computed. If MAX is selected, then only
-#'   the highest value each athlete records will be included in the computation of the between-athlete SD. Conversely, if the user
-#'   indicates MIN, then only the lowest value each athlete records will be used to compute the between-athlete SD.
 #'
 #' @return A table, with each metric being its own column and its entry being the MDC of that metric, is the output of this function
 #'
@@ -117,69 +114,64 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95, method = 'AVG')
+#' baseline <- which(trial == "Trial 1")
+#' MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), baseline, confidence = 0.95)
 #'
 #' @references Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of
 #'   Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
 #'
 #' @export
-MDC <- function(subject, trial, ..., ICC, confidence = 0.95, method = c('AVG', 'MAX', 'MIN')) {
+MDC <- function(subject, trial, ..., ICC, baseline, confidence = 0.95) {
 
-  # The inputs to this function are individual vectors, so here they are brought together into one data frame
-  full_df <- data.frame(subject, ...)
+  # The subject variable must be converted to a factor variable in order for the function to work
+  subject <- as.factor(subject)
 
   # Calls the check_error function, which produces informative error messages if any of a variety of errors are made by the user
   check_error(subject, trial, ...)
 
-  # Subject needs to be a factor variable in order for the next part to work
-  subject <- as.factor(subject)
+  # The inputs to this function are individual vectors, so here they are brought together into one data frame
+  input_df <- data.frame(subject, ...)
 
-  # This data frame is created from the get-go, and it will be the output that is returned at the end
-  output_df <- data.frame(Metric = paste("MDC"))
+  # We care only about the results of the trial we labeled as the "initial trial" in the function arguments
+  input_df <- input_df[c(baseline), ]
 
-  # Putting the reliability vector that is the final function argument is helpful to make its format consistent with SD_baseline
+  # Creates lists into which the SD and MDC values, respectively, will be placed
+  list_SD <- list()
+  list_MDC <- list()
+
+  # Putting the vector of ICC's into a list is helpful to make its format consistent with list_SD and list_MDC
   ICC <- as.list(ICC)
 
   # This line turns the alpha value the user passed to the function into the critical value that we use later in the function
   crit_val <- stats::qnorm((1 + confidence) / 2)
 
-  # This part compiles the values that should be used in the calculation of the between-subject SD, based on the user's choice
-  if (method == 'AVG') {
+  # Calculates the sd of each of the metric columns (not the subject column) and places it into list_SD
+  for (i in 2:ncol(input_df)) {
 
-    # The default is for the average value that each subject records to be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, mean)
-
-  } else if (method == 'MAX') {
-
-    # The user also could have chosen to have only each subject's maximum value be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, max)
-
-  } else if (method == 'MIN') {
-
-    # Otherwise, the lowest value that each subject records will be included in the between-subject SD
-    df <- dplyr::group_by(full_df, subject)
-    df <- dplyr::summarise_if(full_df, is.numeric, min)
+    SD = stats::sd(input_df[, i])
+    list_SD <- append(list_SD, values = SD)
 
   }
 
-  # Calculates the sd of only the columns that correspond to the metrics (not the subject column)
-  SD_btwn <- lapply(full_df[, -1], stats::sd)
+  # Iterates over all items (i.e. all metrics) in the SD list created above, and uses them to compute the SWC for each metric
+  for (i in seq_along(list_SD)) {
 
-  # Iterates over all items (i.e. all metrics) in the SD_baseline list created above
-  for (i in seq_along(SD_btwn)) {
-
-    # The SED for each metric is computed, according to its proper formula, and stored in a list
-    MDC = SD_btwn[[i]] * sqrt(2) * sqrt(1 - ICC[[i]]) * crit_val
-
-    # Places the MDC values into a table and names each row of the table by its metric, which makes for clean output
-    output_df <- cbind(output_df, unlist(MDC))
-    colnames(output_df)[i + 1] <- colnames(full_df)[i + 1]
+    MDC = list_SD[[i]] * sqrt(2) * crit_val * sqrt(1 - ICC[[i]])
+    list_MDC <- append(list_MDC, values = MDC)
 
   }
 
-  # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
+  # Converts the list to a data frame, which creates nicer output
+  output_df <- data.frame(matrix(unlist(list_MDC), nrow = 1))
+
+  # The column names are assigned to be the metric names they represent
+  for (i in seq_along(output_df)) {
+
+    colnames(output_df)[i] <- colnames(input_df)[i + 1]
+
+  }
+
+  # The output data frame is printed
   print.data.frame(output_df, row.names = FALSE)
 
 }
