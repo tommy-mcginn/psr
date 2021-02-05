@@ -1,4 +1,4 @@
-context("Check MDC function")
+context("Check ICC function")
 
 subject_1 <- c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 17,
                18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 30, 30)
@@ -11,10 +11,10 @@ subject_2 <- c()
 trial_2 <- c()
 metric_2 <- c()
 
-test_that("MDC", {
-  expect_equal(round(MDC(subject_1, trial_1, metric_1, ICC = 0.88, confidence = 0.95)[1, 1], 1), 9.7)
+test_that("ICC", {
+  expect_equal(round(ICC(subject_1, trial_1, metric_1)[4, 2], 2), 0.88)
 })
 
-test_that("MDC", {
-  expect_equal(round(MDC(subject_1, trial_1, metric_1, ICC = , confidence = 0.95)[1, 1], 1), )
+test_that("ICC", {
+  expect_equal(round(ICC(subject_2, trial_2, metric_2)[4, 2], 2), )
 })
