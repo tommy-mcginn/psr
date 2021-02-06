@@ -5,9 +5,9 @@ date: "12/23/2020"
 output: html_document
 ---
 
-# Motivation for Package
+# Motivation 
 
-This package is intended for coaches and analysts in the field of performance science. It is meant to allow its user to gain insight into metrics of both measurement reliability as well as individual change, given data from a set of athletes. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. Another theme pertains to determining the smallest change from the baseline needed to be considered meaningful. That is where the smallest worthwhile change (SWC) and minimal detectable change (MDC) enter the picture. One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function builds on the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
+This package is intended for practitioners and coaches in the field of sports performance science. It is meant to allow the user to obtain metrics for measurement reliability and individual change, given data from a set of athletes over several trials, or occasions. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. These measures are used to assess the reliability of the measurements taken on a group of athletes. Another theme pertains to determining the smallest change from the baseline measurement needed to be considered meaningful, quantified by smallest worthwhile change (SWC) and minimal detectable change (MDC). One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function provides a wrapper for the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
 
 # Within-Athlete Variation
 
@@ -39,13 +39,13 @@ TE(subject, trial, metric_1, metric_2, metric_3)
 # 23.53248 0.2369951 134.7632
 ```
 
-The output is a neat table that reports the TE values of each of the three metrics. One issue that comes up, however, is that of interpreting these values. The TE for metric_3 is much larger than the TE for metric_2, but that is largely due to the fact that metric_3 is on a different scale than metric_2. How can one tell if the TE is high, low, or just right? The CV gives an answer to that question.
+The output is a table that reports the TE values of each of the three metrics. The TE is in the units of the original data. Thus, interpretation is difficult. The TE for metric_3 is much larger than the TE for metric_2, but that is largely due to the fact that metric_3 is on a different scale than metric_2. 
 
 ## CV()
 
-The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing explanations of the CV in the literature, and this package chooses to follow the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
+The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. Thus, in contrast to the TE, it is a unitless measure (TOMMY, IS THIS CORRECT?) It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing formulas for CV in the sports science literature, and this package implements the formula given by Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
 
-Using the same data as in the TE() section above and running the code, one gets:
+Using the same data as in the TE() section above, the CV function yields:
 
 ```{r}
 CV(subject, trial, metric_1, metric_2, metric_3)
@@ -56,11 +56,11 @@ CV(subject, trial, metric_1, metric_2, metric_3)
 # 9.160569 20.43061  10.6122
 ```
 
-As one can see, the CV function yields a way of comparing across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable. This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable.
+The CV statistic allows for the comparison of reliability across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable (NEED CITATION). This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable (NEED CITATION FOR THESE CATEGORIES).
 
 ## SEM()
 
-The SEM is similar to the CV, but has one key difference: it utilizes the ICC, which is another measure of reliability. It is calculated by using the following formula:
+The SEM is similar to the CV, but has one key difference: it utilizes the ICC, which is another measure of reliability. (NEED SOMETHING ABOUT INTERPRETATION; WHY USE IT) It is calculated by using the following formula:
 
 [Insert image of formula here]
 
@@ -81,7 +81,7 @@ Running the code, the familiar form of the output is displayed:
 
 # Reliability of Measurement Instrument
 
-There are a couple of functions to measure the reliability of the measurement instrument from which the data comes. The main function that achieves this purpose is ICC(). This function is similar to psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()).
+There are a couple of functions to measure the reliability of the measurement instrument from which the data comes (AREN'T TE AND CV ALSO USED TO ASSESS RELIABILITY? LET'S DISCUSS). The main function that achieves this purpose is ICC(). This function is a wrapper for the ICC() function in the psych package (NEED TO CITE psych PACKAGE), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()).
 
 The ICC is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC() prints the ICC values of all six forms.
 
