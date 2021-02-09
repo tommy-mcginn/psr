@@ -1,13 +1,16 @@
----
 title: "psr Explained"
 author: "Tommy McGinn"
-date: "12/23/2020"
-output: html_document
+date: "2/8/2021"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{psr Explained}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-# Motivation 
+# Motivation for Package
 
-This package is intended for practitioners and coaches in the field of sports performance science. It is meant to allow the user to obtain metrics for measurement reliability and individual change, given data from a set of athletes over several trials, or occasions. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. These measures are used to assess the reliability of the measurements taken on a group of athletes. Another theme pertains to determining the smallest change from the baseline measurement needed to be considered meaningful, quantified by smallest worthwhile change (SWC) and minimal detectable change (MDC). One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function provides a wrapper for the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
+This package is intended for coaches and analysts in the field of performance science. It is meant to allow its user to gain insight into metrics of both measurement reliability as well as individual change, given data from a set of athletes. The functions in psr are all built around different themes. One of these themes are measures of the standard error between athletes, which is captured in the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. Another theme pertains to determining the smallest change from the baseline needed to be considered meaningful. That is where the smallest worthwhile change (SWC) and minimal detectable change (MDC) enter the picture. One can also use the MDC to set specific benchmarks for athletes for future measurements, which is what the reliable change index (RCI) function accomplishes. In addition, the intraclass correlation coefficient (ICC) function builds on the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers.      
 
 # Within-Athlete Variation
 
@@ -15,7 +18,14 @@ There are three different ways which psr offers to calculate the standard error 
 
 ## TE()
 
-The typical error is the within-athlete variation of the athlete measurements in the data, and it is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors, as described in Hopkins (2000). It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on.
+The Typical Error (TE) is the within-athlete variation of the athlete measurements in the data. It is a measure of how much one should "typically" expect the measurements of each athlete to vary from trial to trial, due to noise in the data. Such noise could be the result of biological variation in the athletes or measurement error on the part of the instrument being used to record the in the test that the athletes are completing. If there are just two trials being analyzed, the TE is just the standard deviation of the difference scores of each athlete between the first trial and the second trial, divided by root 2. 
+
+If more than two trials are being studied, the TE is the squared residual of a linear model with the metric measurement as the response and the subject and trial variables (both as factors) as the predictors, as described in Hopkins (2000). It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on. In other words, it is the root mean squared error (RMSE), or residual standard error, of the relevant linear model. To see an example of the TE being computed in practice, the following code is run within TE():
+
+```{r, eval = FALSE}
+lm_TE <- lm(metric ~ as.factor(subject) + as.factor(trial))
+TE = sigma(lm_TE)
+```
 
 As an example, one can use simple data of three different athletes performing three trials each:
 
@@ -39,13 +49,13 @@ TE(subject, trial, metric_1, metric_2, metric_3)
 # 23.53248 0.2369951 134.7632
 ```
 
-The output is a table that reports the TE values of each of the three metrics. The TE is in the units of the original data. Thus, interpretation is difficult. The TE for metric_3 is much larger than the TE for metric_2, but that is largely due to the fact that metric_3 is on a different scale than metric_2. 
+The output is a neat table that reports the TE values of each of the three metrics. One issue that comes up, however, is that of interpreting these values. The TE for metric_3 is much larger than the TE for metric_2, but that is largely due to the fact that metric_3 is on a different scale than metric_2. How can one tell if the TE is high, low, or just right? The CV gives an answer to that question.
 
 ## CV()
 
-The coefficient of variation (CV) is the TE expressed as a percentage of the mean of the data. Thus, in contrast to the TE, it is a unitless measure (TOMMY, IS THIS CORRECT?) It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing formulas for CV in the sports science literature, and this package implements the formula given by Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms.
+The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. (TOMMY, IS THIS CORRECT?) It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing explanations of the CV in the literature, and this package chooses to follow the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms. In turn, the advantage of using CV() as opposed to TE() is that the CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
 
-Using the same data as in the TE() section above, the CV function yields:
+Using the same data as in the TE() section above and running the code, one gets:
 
 ```{r}
 CV(subject, trial, metric_1, metric_2, metric_3)
@@ -56,13 +66,11 @@ CV(subject, trial, metric_1, metric_2, metric_3)
 # 9.160569 20.43061  10.6122
 ```
 
-The CV statistic allows for the comparison of reliability across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable (NEED CITATION). This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable (NEED CITATION FOR THESE CATEGORIES).
+As one can see, the CV function yields a way of comparing across metrics. Whereas the TE of metric_2 was much smaller than the TE of metric_3 based solely on the relative magnitudes of the metrics, the CV of metric_2 is actually almost double the CV of metric_3. In other words, metric_2 is much less reliable than metric_3. Generally speaking, a CV of greater than 10 is considered to be reliable. (NEED CITATION) This means that metric_2 is highly unreliable, while metric_3 is marginally unreliable and metric_1 is solidly reliable. (NEED CITATION FOR THESE CATEGORIES)
 
-## SEM()
+## Between-Athlete Variation: SEM()
 
-The SEM is similar to the CV, but has one key difference: it utilizes the ICC, which is another measure of reliability. (NEED SOMETHING ABOUT INTERPRETATION; WHY USE IT) It is calculated by using the following formula:
-
-[Insert image of formula here]
+The Standard Error of Measurement (SEM) is similar to the TE and CV, and can be seen as another way of quantifying the amount of variability between athletes: it  however: it utilizes the ICC, which is another measure of reliability. (NEED SOMETHING ABOUT INTERPRETATION; WHY USE IT) The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC). 
 
 Running the code for SEM(), using the same data as in the case of the TE() and CV():
 
@@ -79,16 +87,16 @@ Running the code, the familiar form of the output is displayed:
 #    SEM  5.92865 0.0309758  36.4701
 ```
 
-# Reliability of Measurement Instrument
+# Reliability of Measurement Instrument: ICC_long()
 
-There are a couple of functions to measure the reliability of the measurement instrument from which the data comes (AREN'T TE AND CV ALSO USED TO ASSESS RELIABILITY? LET'S DISCUSS). The main function that achieves this purpose is ICC(). This function is a wrapper for the ICC() function in the psych package (NEED TO CITE psych PACKAGE), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()).
+The function that measures the reliability of the measurement instrument from which the data comes is ICC_long(). (AREN'T TE AND CV ALSO USED TO ASSESS RELIABILITY? LET'S DISCUSS) The Intraclass Correlation Coefficient (ICC) is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
 
-The ICC is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC() prints the ICC values of all six forms.
+ICC_long() is simply a wrapper of psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()), both of which are explained in detail below. (NEED TO CITE psych PACKAGE)
 
-To illustrate ICC() at work, the same example as above can be employed:
+To illustrate ICC_long() at work, the same example as above can be employed:
 
 ```{r}
-ICC(subject, trial, metric_1, metric_2, metric_3)
+ICC_long(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
@@ -99,17 +107,81 @@ The function takes the same inputs as TE() and CV(), but yields output that take
 
 The output above is simply a list of the ICC's for each metric. ... The choice of which ICC form to use for the data entered is left to the user.
 
+## Different Argument Forms from psych::ICC()
+
+The ICC function in the psych package takes entire data as its only input. In addition, it also requires that the data be in the "wide" form, so that each subject is its own row, the trials represent the columns, and each subject's measurement from each trial fills in the entries of the data. A table in this "wide" form of data looks like this:
+
+| Subject | Trial 1 | Trial 2 | Trial 3 |
+|--------:|:-------:|:-------:|:--------|
+|    1    |   275   |   208   |   239   |
+|    2    |   217   |   260   |   274   |
+|    3    |   267   |   261   |   253   |
+
+In reality many data are actually in "long" form, so that there are multiple rows for each subject and a column representing which trial each measurement came from. A data table in "long form" looks like this:
+
+| Subject |  Trial  | Score |
+|--------:|:-------:|:------|
+|    1    | Trial 1 |  275  |
+|    1    | Trial 2 |  208  |
+|    1    | Trial 3 |  239  |
+|    2    | Trial 1 |  217  |
+|    2    | Trial 2 |  260  |
+|    2    | Trial 3 |  274  |
+|    3    | Trial 1 |  267  |
+|    3    | Trial 2 |  261  |
+|    3    | Trial 3 |  253  |
+
+The ICC function in the PerfSciReliability package explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" format (using the pivot_wider function in the tidyr package), so that the ICC function from the psych package can be run on each metric, displaying the same output that the ICC function from the psych package would display. In other words, our ICC function is a "wrapper" function for that in the psych package, which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in whatever format, as long as the user can properly extract these vectors from the data.
+
+## Allowing More Metrics than psych::ICC()
+
+An extension of the difference described in the previous section is the fact that the ICC function in the PerfSciReliability package allows for the simultaneous computation of the ICC for multiple metrics, however many the user wants, whereas the ICC function in the psych package is limited in that, as it takes as its input data in "wide" format, it can only calculate the ICC for one metric at a time, due to the fact that data in "wide" format by construction include only the measurements of one metric.
+
+To further explain the gained efficiency from using the new and improved version of the ICC function, if one wanted to see the ICC output of five different metrics from a given group of subjects and was using the ICC function in the psych package, that person would need to create five different data frames, one for each metric, all in "wide" form, and pass each data frame to the ICC function separately. To illustrate this point further, the user would need to run the following code for each metric of interest:
+
+```{r, eval = FALSE}
+tidyr::pivot_wider(data, names_from = "trial", values_from = "metric")
+psych::ICC(data)
+```
+
+Conversely, using ICC_long(), the user could simply enter the subject and trial vectors before entering the five vectors containing the measurements for each metric, subsequently showing the ICC output for all five metrics after just one function call. In short, the user only needs to run the following code once:
+
+```{r, eval = FALSE}
+ICC_long(subject, trial, metric1, metric2, metric3, metric4, metric5)
+```
+
+This simplified process cuts down considerably on the time and effort required by the user in order to see the ICC output for all five metrics. In addition, all of the ICC outputs for the various metrics can be seen one directly after another, making it easier to compare the reliability of each metric. 
+
 # Setting Benchmarks for Athletes (What Constitutes Reliable Change?)
 
 There are a couple of functions that allow practitioners to set benchmarks for athletes: the SWC and the MDC. The RCI is an extension of the MDC and also appears in our package.
 
 ## SWC()
 
-The SWC is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2):
+The Smallest Worthwhile Change (SWC) is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile, and not just the result of random or measurement error. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2).
 
-[Insert image of formula here]
+For the SWC function, the user can choose which method should be used for the computation of the between-athlete standard deviation involved in the formula. Does the user want to average each subject's values and use the standard deviation of these averages (the default), or should only each subject's maximum or minimum value be considered? This is the purpose of the group_by and summarise functions from the dplyr package that are used inside of the SWC function:
 
-The larger the effect size the user desires, the larger the value of the SWC will be. Another source of user input is the values to be used when computing the between-athlete standard deviation. This method argument takes either 'MIN', 'MAX', or 'AVG', as described in the SEM() section earlier in this vignette. Using the same data as previously, the output looks as follows:
+```{r, eval = FALSE}
+if (method == AVG) {
+
+  df <- group_by(df, subject)
+  df <- summarise(df, across(where(is.numeric), ~ mean(.x)))
+
+} else if (method == MAX) {
+
+  df <- group_by(df, subject)
+  df <- summarise(df, across(where(is.numeric), ~ max(.x)))
+
+} else {
+
+  df <- group_by(df, subject)
+  df <- summarise(df, across(where(is.numeric), ~ min(.x)))
+
+}
+```
+
+Computing the SWC for the same data as in the prior three functions looks like this:
 
 ```{r}
 SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
@@ -130,9 +202,7 @@ For the data utilized in the preceding sections, the TE is much greater than the
 
 ## MDC()
 
-Another way of quantifying change that is larger than the size of error in the measurement instrument is the MDC. This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is in turn based on how confident the user wants to be that the MDC value generated cannot be explained solely by error. It is essentially a manifestation of how large of a change would need to occur in order for it to be statistically significant. The formula for the MDC is:
-
-[Insert image of formula here]
+With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is in turn based on how confident the user wants to be that the MDC value generated cannot be explained solely by error. The default confidence level in our function is 0.95, meaning that, if the MDC indicated by the function were to ba achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level. The formula for the MDC is:
 
 Using this formula with the usual data, the resulting output is:
 
@@ -156,6 +226,8 @@ RCI(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), con
 ```
 
 RCI() substitutes the method argument in MDC() for a baseline argument instead, which mandates the user specify a specific set of measurements that should serve as the baseline for the computation of the RCI. The method argument is needed in MDC() to determine how the function should deal with each athlete potentially having multiple measurements in the data. This is not an issue in RCI(), as the specification of the baseline trial ensures that there is only one trial that is used to calculate the RCI.
+
+The Reliable Change Index (RCI) is an extension of the MDC and is specifically focused on comparing an athlete's scores at two distinct points in time. It uses the MDC to determine the threshold of what constitutes an actual change in performance, both positive and negative. To this end, our RCI function yields two vectors, one for the lower bound and another for the upper bound, that define the thresholds for identifying a change as reliable from each individual's measurement(s) at a specific point in time (explicitly identified by the user), such that if the individual were to score lower than his or her lower bound or higher than his or her upper bound, a reliable change would be said to have occurred.
 
 The output that results from running this function with the data used in the previous examples is shown below:
 
@@ -200,3 +272,70 @@ It produces simple output that looks as follows for the same data that was used 
 ```
 
 This output lends insight into how well each athlete performed on each trial, compared to all of the measurements recorded in the data for the same metric. One can see that subject 1 recorded mostly higher than average measurements for Trial 1 and Trial 2, but these measurements were lower than the average for all three metrics in Trial 3. In Trial 1, subject 2 recorded high measurements for metric 1 and metric 2 and a low measurement for metric 3 compared to his or her peers, while the opposite was the case for subject 3. This function makes it easy to see how each athlete is performing relative to the other athletes for a given trial and metric combination, and how this performance differs across trials and metrics, respectively.
+
+# Error Examples
+
+This vignette explains potential errors that could occur in entering data into the functions in psr, why they would be problematic, and shows the informative error messages that are produced when the user makes these mistakes when running the functions. TE() is used to illustrate each potential error, but entering the same data into any of the functions should produce the same error message.
+
+# Error 1: Trials Not Labeled Uniformly Across Athletes
+
+One potential error that could be made is the trials not being labeled in the same way across each athlete. To see an example of this, consider the following code:
+
+```{r}
+# subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+# trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 4')
+# metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
+# metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
+# metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+# TE(subject, trial, metric_1, metric_2, metric_3)
+```
+
+The problem is that subject 3's third measurement is labeled as Trial 4, rather than Trial 3, as is the case for the other two subjects. Subject 3 does not record a measurement for Trial 3, while neither Subject 1 nor Subject 2 record a measurement for Trial 4. If one were to run the following code, the following error message would show up:
+
+```{r}
+# [1] "Each athlete must have recorded a measurement for each trial"
+```
+
+This message precisely explains the issue, which is that each athlete has not recorded a measurement for each trial. This message precedes the unhelpful R message that is produced when any function does not work properly, meaning that it is visible to the user directly under the code that had just been entered.
+
+# Error 2: Duplicate Trials for an Athlete
+
+What if an athlete has recorded multiple measurements for one trial? An example of this is shown below:
+
+```{r}
+# subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+# trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 2')
+# metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
+# metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
+# metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+# TE(subject, trial, metric_1, metric_2, metric_3)
+```
+
+As one can see, Subject 3 has recorded two measurements for Trial 2. One would be correct to note that this subject has also not recorded a measurement for Trial 3, hence Error 1 has also occurred in this code. If both errors occur, only the message for Error 2 is shown to the user, as it does in this example:
+
+```{r}
+# [1] "Each athlete must not have recorded multiple measurements for any trial"
+```
+
+This message is shown and offers a clear and concise indicator of what has gone wrong in the code that the user had just entered.
+
+# Error 3: Character Vector for Metric
+
+In the following error example, the trials are all labeled correctly, but the first metric is entered as a character vector, when it needs to be a numeric vector:
+
+```{r}
+# subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+# trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+# metric_1 <- c("abc", "def", "ghi", "jkl", "mno", "pqr", "stu", "vwx", "yzz")
+# metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
+# metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+# TE(subject, trial, metric_1, metric_2, metric_3)
+```
+
+When this code is run, the following helpful error message is displayed, directly below the code that the user had just entered:
+
+```{r}
+# [1] "Each metric must be numeric"
+```
+
+Yet again, the user knows exactly why the code that he or she had just entered did not run properly.
