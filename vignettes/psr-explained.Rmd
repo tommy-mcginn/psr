@@ -53,7 +53,7 @@ The output is a neat table that reports the TE values of each of the three metri
 
 ## CV()
 
-The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. (TOMMY, IS THIS CORRECT?) It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing explanations of the CV in the literature, and this package chooses to follow the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms. In turn, the advantage of using CV() as opposed to TE() is that the CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
+The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are competing explanations of the CV in the literature, and this package chooses to follow the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error, drawing attention to the two measurements represent the same thing, with the only difference being that the TE is expressed in absolute terms, while the CV is expressed in percentage terms. In turn, the advantage of using CV() as opposed to TE() is that the CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
 
 Using the same data as in the TE() section above and running the code, one gets:
 
@@ -70,7 +70,7 @@ As one can see, the CV function yields a way of comparing across metrics. Wherea
 
 ## Between-Athlete Variation: SEM()
 
-The Standard Error of Measurement (SEM) is similar to the TE and CV, and can be seen as another way of quantifying the amount of variability between athletes: it  however: it utilizes the ICC, which is another measure of reliability. (NEED SOMETHING ABOUT INTERPRETATION; WHY USE IT) The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC). 
+The Standard Error of Measurement (SEM) is similar to the TE and CV, and can be seen as another way of quantifying the amount of variability between athletes: it  however: it utilizes the ICC, which is another measure of reliability. The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC). 
 
 Running the code for SEM(), using the same data as in the case of the TE() and CV():
 
@@ -89,7 +89,7 @@ Running the code, the familiar form of the output is displayed:
 
 # Reliability of Measurement Instrument: ICC_long()
 
-The function that measures the reliability of the measurement instrument from which the data comes is ICC_long(). (AREN'T TE AND CV ALSO USED TO ASSESS RELIABILITY? LET'S DISCUSS) The Intraclass Correlation Coefficient (ICC) is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
+The Intraclass Correlation Coefficient (ICC) is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different circumstances, as detailed in. The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
 
 ICC_long() is simply a wrapper of psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()), both of which are explained in detail below. (NEED TO CITE psych PACKAGE)
 

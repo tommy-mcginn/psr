@@ -1,4 +1,4 @@
-#' @title Intraclass Correlation Coefficient (ICC) for a set of athlete measurements
+#' @title Intraclass Correlation Coefficient (ICC) for a set of athlete measurements, with the data in long format
 #'
 #' @description Computes the ICC for each vector of measurements that is passed to the function, for the vectors that are the first
 #'   two arguments called to the function (the subject vector and the trial vector, in that order).
@@ -18,13 +18,13 @@
 #' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
 #' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
 #' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
-#' ICC(subject, trial, metric_1, metric_2, metric_3)
+#' ICC_long(subject, trial, metric_1, metric_2, metric_3)
 #'
 #' @references Shrout, P. E., &amp; Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. Psychological
 #'   Bulletin, 86(2), 420-428.
 #'
 #' @export
-ICC <- function(subject, trial, ...) {
+ICC_long <- function(subject, trial, ...) {
 
   # The inputs to this function are individual vectors, so here they are brought together into one data frame
   input_df <- data.frame(subject, trial, ...)
