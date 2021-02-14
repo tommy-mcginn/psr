@@ -1,6 +1,6 @@
 #' @title Typical Error (TE) for a set of athlete measurements
 #'
-#' @description Computes the TE for each vector of measurements that is passed to the function, for the vector of subjects in the
+#' @description Computes the typical error (TE) for each vector of measurements that is passed to the function, for the vector of subjects in the
 #'   first argument
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
@@ -65,7 +65,7 @@ TE <- function(subject, trial, ...) {
 #' @title Coefficient of Variation (CV), or typical percentage error (as in Hopkins (2000)) for a set of athlete measurements,
 #'   expressed as a percentage
 #'
-#' @description Computes the CV for each vector of measurements that is passed to the function, for the vector of subjects in the
+#' @description Computes the coefficient of variation (CV) for each vector of measurements that is passed to the function, for the vector of subjects in the
 #'   first argument and the vector of trials in the second argument
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
