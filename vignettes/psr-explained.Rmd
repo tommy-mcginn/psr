@@ -1,6 +1,6 @@
 title: "psr Explained"
 author: "Tommy McGinn"
-date: "2/8/2021"
+date: "2/15/2021"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{psr Explained}
@@ -35,9 +35,9 @@ The following data set consists of three different athletes performing three tri
 ```{r}
 subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 ```
 
 The TE() function is called by specifying the rows containing the subjects, trials, and metrics:
@@ -77,7 +77,7 @@ The Standard Error of Measurement (SEM) is similar to the TE and CV, and is a wa
 Running the code for SEM(), using the same data as in the case of the TE() and CV():
 
 ```{r}
-SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95))
+SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99))
 ```
 
 As noted earlier, SEM() adds one additional argument to those in TE() and CV(). This addition is a list of the individual ICC values for the metrics, which must be entered in order. In the above example, the ICC values for metric_1, metric_2, and metric_3 are 0.92, 0.98, and 0.95, respectively.
@@ -88,6 +88,8 @@ Running the code, the familiar form of the output is displayed: (CAN WE ADD AN I
 # Metric metric_1  metric_2 metric_3
 #    SEM  5.92865 0.0309758  36.4701
 ```
+
+This output mirrors that of the TE function shown earlier in that metric_2 is more reliable than metric_1, which is more reliable than metric_3. It differs from what the CV output indicates, however, which indicates that metric_2 is actually much less reliable than either metric_1 or metric_3. This pattern emerges because the CV is a unitless measure, whereas both the TE and the SEM derive their intepretations (at least in part) from the units in which they are measured. It is important to examine all of these statistics when making conclusions on the relative reliabilities of various metrics.   
 
 ## 2.4. Intraclass Correlation Coefficient: ICC_long()
 
@@ -104,7 +106,51 @@ ICC_long(subject, trial, metric_1, metric_2, metric_3)
 The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
 
 ```{r}
+# $metric_1
+# Call: psych::ICC(x = df)
 
+# Intraclass correlation coefficients 
+#                          type  ICC   F df1 df2       p lower bound upper bound
+# Single_raters_absolute   ICC1 0.98 167   2   6 5.5e-06        0.91           1
+# Single_random_raters     ICC2 0.98 167   2   4 1.4e-04        0.91           1
+# Single_fixed_raters      ICC3 0.98 167   2   4 1.4e-04        0.88           1
+# Average_raters_absolute ICC1k 0.99 167   2   6 5.5e-06        0.97           1
+# Average_random_raters   ICC2k 0.99 167   2   4 1.4e-04        0.97           1
+# Average_fixed_raters    ICC3k 0.99 167   2   4 1.4e-04        0.96           1
+
+#  Number of subjects = 3     Number of Judges =  3
+```
+
+```{r}
+# $metric_2
+# Call: psych::ICC(x = df)
+
+# Intraclass correlation coefficients 
+#                          type  ICC  F df1 df2      p lower bound upper bound
+# Single_raters_absolute   ICC1 0.82 14   2   6 0.0051        0.38        0.99
+# Single_random_raters     ICC2 0.82 14   2   4 0.0147        0.38        0.99
+# Single_fixed_raters      ICC3 0.82 14   2   4 0.0147        0.27        0.99
+# Average_raters_absolute ICC1k 0.93 14   2   6 0.0051        0.64        1.00
+# Average_random_raters   ICC2k 0.93 14   2   4 0.0147        0.64        1.00
+# Average_fixed_raters    ICC3k 0.93 14   2   4 0.0147        0.52        1.00
+
+#  Number of subjects = 3     Number of Judges =  3
+```
+
+```{r}
+# $metric_3
+# Call: psych::ICC(x = df)
+
+# Intraclass correlation coefficients 
+#                          type  ICC   F df1 df2       p lower bound upper bound
+# Single_raters_absolute   ICC1 0.98 143   2   6 8.7e-06        0.90           1
+# Single_random_raters     ICC2 0.98 143   2   4 1.9e-04        0.90           1
+# Single_fixed_raters      ICC3 0.98 143   2   4 1.9e-04        0.87           1
+# Average_raters_absolute ICC1k 0.99 143   2   6 8.7e-06        0.96           1
+# Average_random_raters   ICC2k 0.99 143   2   4 1.9e-04        0.96           1
+# Average_fixed_raters    ICC3k 0.99 143   2   4 1.9e-04        0.95           1
+
+#  Number of subjects = 3     Number of Judges =  3
 ```
 
 The output above is simply a list of the ICC's for each metric. ... The choice of which ICC form to use for the data entered is left to the user.
@@ -149,7 +195,7 @@ psych::ICC(data)
 Conversely, using ICC_long(), the user could simply enter the subject and trial vectors before entering the five vectors containing the measurements for each metric, subsequently showing the ICC output for all five metrics after just one function call. In short, the user only needs to run the following code once:
 
 ```{r, eval = FALSE}
-ICC_long(subject, trial, metric1, metric2, metric3, metric4, metric5)
+ICC_long(subject, trial, metric_1, metric_2, metric_3, metric_4, metric_5)
 ```
 
 This simplified process cuts down considerably on the time and effort required by the user in order to see the ICC output for all five metrics. In addition, all of the ICC outputs for the various metrics can be seen one directly after another, making it easier to compare the reliability of each metric. 
@@ -160,9 +206,9 @@ The SWC() and MDC() function allow practitioners to set benchmarks for athletes.
 
 ## 3.1. Smallest Worthwhile Change: SWC()
 
-The Smallest Worthwhile Change (SWC) is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile (i.e. practically meaningful), rather than merely the result of random or measurement error. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2).
+The Smallest Worthwhile Change (SWC) is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile (i.e. practically meaningful), rather than merely the result of random or measurement error. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2), as explained in Bernards et al. (2017).
 
-For the SWC function, the user can choose which method should be used for the computation of the between-athlete standard deviation involved in the formula. Does the user want to average each subject's values and use the standard deviation of these averages (the default), or should only each subject's maximum or minimum value be considered? This is the purpose of the group_by and summarise functions from the dplyr package that are used inside of the SWC function:
+For the SWC function, the user can choose which method should be used for the computation of the between-athlete standard deviation involved in the formula. Does the user want to average each subject's values and use the standard deviation of these averages (the default), or should only each subject's maximum or minimum value be considered? This is the purpose of the group_by and summarise functions from the dplyr package that are used inside of the SWC function.
 
 Computing the SWC for the same data as in the prior three functions looks like this:
 
@@ -182,12 +228,12 @@ For the data example in the preceding sections, the TE is much greater than the 
 
 ## 3.2. Minimal Detectable Change: MDC()
 
-With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level. The formula for the MDC is:
+With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level.
 
 Using this formula with the usual data, the resulting output is:
 
 ```{r}
-MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95, method = 'AVG')
+MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95, method = 'AVG')
 ```
 
 ```{r}
@@ -199,9 +245,11 @@ There is one important thing to note from this output. The MDC is much larger th
 
 # 4. Individual Level Metrics
 
+The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection, and they have represented group-wide concepts. Practitioners might also wish to conduct analysis at the individual level. To achieve this purpose, psr includes two functions: STEN() and PROBRC()
+
 ## 4.1. Standard Ten Scores: STEN()
 
-The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection.In addition, practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN; CITATION) scores of the athletes for each metric. The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
+Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN; CITATION) scores of the athletes for each metric. The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
 
 ```{r}
 STEN(subject, trial, metric_1, metric_2, metric_3)
@@ -226,12 +274,12 @@ This output lends insight into how well each athlete performed on each trial, co
 
 # 4.2. Probability of Reliable Change: PROBRC()
 
-Similar to STEN(), PROBRC() calculates an individual-level metric, as opposed to the other functions in the package described in Sections 2 and 3, all of which yield one output statistic for the entire group represented in the data. PROBRC() computes the probability that a given change from one trial to another was reliable, for each athlete in the data. As in the other functions, this function takes the subject, trial, and metric vectors as inputs, in addition to the ICC's of each of the metrics. The user must make an additional specification when calling the function: he or she must indicate which trials in the data should represent the initial and final trials, respectively, that will be compared in the calculation of the probability of reliable change.
+Similar to STEN(), PROBRC() calculates an individual-level metric. PROBRC() computes the probability that a given change from one trial to another was reliable, for each athlete in the data. This concept appears in Ferger & Büsch (2018). As in the other functions, this function takes the subject, trial, and metric vectors as inputs, in addition to the ICC's of each of the metrics. The user must make an additional specification when calling the function: he or she must indicate which trials in the data should represent the initial and final trials, respectively, that will be compared in the calculation of the probability of reliable change.
 
 The following example takes the same data as above:
 
 ```{r}
-PROBRC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.95, 0.98), initial = which(trial == "Trial 1"), final = which(trial == "Trial 2"))
+PROBRC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), initial = which(trial == "Trial 1"), final = which(trial == "Trial 2"))
 ```
 
 As one can see, the user wants to see whether "Trial 2" was a reliable change from "Trial 1", for each athlete and metric. It yields the following output:
@@ -322,8 +370,16 @@ Yet again, the user knows exactly why the code that he or she had just entered d
 
 Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables.
 
+Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport Science and a Need for Change. Sports, 5(4), 87.
+
+Ferger, K., & Büsch, D. (2018). Individual measurement of performance change in sports. Deutsche Zeitschrift Für Sportmedizin, 2018(02), 45-52.
+
 Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
 
 Revelle W (2020). psych: Procedures for Psychological, Psychometric, and Personality Research. Northwestern University, Evanston, Illinois. R package version 2.0.12, https://CRAN.R-project.org/package=psych.
 
+Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
+
 https://www.sportsci.org/resource/stats/precision.html
+
+https://www.statisticshowto.com/sten-score/

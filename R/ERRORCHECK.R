@@ -1,5 +1,6 @@
 # This function performs error checking for a given set of subjects and trials passed to the function
-# It is meant to be inserted within each function to be computed automatically within the function, not to be called by the user
+# It is inserted within each function to be computed automatically within the function, and is never called by the user
+
 check_error <- function(subject, trial, ...) {
 
     # A data frame is made, containing all of the vectors of the measurements
