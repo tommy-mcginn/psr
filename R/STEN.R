@@ -1,18 +1,19 @@
 #' @title Standard Ten (STEN) Scores for a set of athlete measurements
 #'
-#' @description Converts each score of each metric passed to the function into its corresponding STEN score, which is a way of
-#'   putting scores that have different units on the same scale, namely that which has a minimum value of 1 and a maximum value of 10
-#'   for all metrics. This serves the main purpose of allowing for easy comparison of an athlete's scores for different metrics that
-#'   might be measured in different units (so that it can be identified which metrics are areas of strength and which are areas of
-#'   weakness for the athlete). The STEN method fulfills the same purpose as standardizing the scores (i.e. converting all of the
-#'   scores to z-scores), but has the advantage of potentially being easier to understand for some practitioners and coaches.
+#' @description Converts each score of each metric passed to the function into its corresponding STEN score. The STEN score converts
+#'   metrics that have different units to the same scale, with a minimum value of 1 and a maximum value of 10 for all metrics. This
+#'   allows one to easily compare an athlete's scores for different metrics that are measured in different units, which enables one
+#'   to identify which metrics are areas of strength and which are areas of weakness for each athlete. The STEN method fulfills the
+#'   same purpose as standardizing the scores (i.e. converting all of the scores to z-scores), but might be easier for practitioners
+#'   and coaches to understand.
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
+#' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics which scores should be computed to STEN scores. These vectors hold the
 #'   scores that each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #'
-#' @return The measurements of the metrics are converted from their respective original units of measurement to the unitless STEN
-#'   score that the measurement represents.
+#' @return A data frame, with the subjects as rows and the metrics as columns, and each entry representing the original measurement
+#'   of the given metric having been converted to the unitless STEN score.
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)

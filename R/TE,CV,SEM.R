@@ -1,14 +1,13 @@
 #' @title Typical Error (TE) for a set of athlete measurements
 #'
-#' @description Computes the typical error (TE) for each vector of measurements that is passed to the function, for the vector of subjects in the
-#'   first argument
+#' @description Computes the TE for each vector of measurements that is passed to the function, for the subject and trial vectors
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
 #' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics for which the CV should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function)
 #'
-#' @return A table, with each metric being its own column and its entry being the TE of that metric, is the output of this function
+#' @return A data frame, with the name of each metric situated above its calculated TE
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
@@ -62,18 +61,16 @@ TE <- function(subject, trial, ...) {
 
 }
 
-#' @title Coefficient of Variation (CV), or typical percentage error (as in Hopkins (2000)) for a set of athlete measurements,
-#'   expressed as a percentage
+#' @title Coefficient of Variation (CV), or typical percentage error (as in Hopkins (2000)), for a set of athlete measurements
 #'
-#' @description Computes the coefficient of variation (CV) for each vector of measurements that is passed to the function, for the vector of subjects in the
-#'   first argument and the vector of trials in the second argument
+#' @description Computes the CV for each vector of measurements that is passed to the function, for the subject and trial vectors
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
 #' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics for which the CV should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #'
-#' @return A table, with each metric being its own column and its entry being the CV of that metric, is the output of this function
+#' @return A data frame, with the name of each metric situated above its calculated CV
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
@@ -130,20 +127,18 @@ CV <- function(subject, trial, ...) {
 
 #' @title Standard Error of Measurement (SEM) for a set of athlete measurements
 #'
-#' @description Computes the SEM for each metric that is passed to the function as a vector of measurements
+#' @description Computes the SEM for each metric that is passed to the function as a vector of measurements, for the subject and
+#'   trial vectors and the ICC's of the metrics
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
+#' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics for which the SEM should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #' @param ICC A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same number
 #'   of elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values
 #'   must appear in the same order as the metrics appear in the "..." argument.
-#' @param method The user's choice of how the between-athlete SD should be computed in the formula for the SEM. If set to AVG, each
-#'   athlete's values will be averaged before the SD of these between-athlete averages is computed. If MAX is selected, then only
-#'   the highest value each athlete records will be included in the computation of the between-athlete SD. Conversely, if the user
-#'   indicates MIN, then only the lowest value each athlete records will be used to compute the between-athlete SD.
 #'
-#' @return A table, with each metric being its own column and its entry being the SEM of that metric, is the output of this function
+#' @return A data frame, with the name of each metric situated above its calculated SEM
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)

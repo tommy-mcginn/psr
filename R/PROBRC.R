@@ -3,19 +3,19 @@
 #' @description For each change that an athlete records from one trial to another, the probability that the change is reliable is
 #'   generated, along with asterisks for athletes that have achieved given probabilities of change.
 #'
-#' @param subject The subjects for which the probabilities of reliable change should be computed
-#' @param initial The set of measurements to be considered the "before" measurements
-#' @param final The set of measurements to be considered the "after" measurements
+#' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
+#' @param trial The vector that represents which trial each measurement came from
+#' @param initial The trial to be considered the "before" (or baseline) measurements
+#' @param final The trial to be considered the "after" measurements (the trial we are comparing to the baseline)
 #' @param ... Numeric vectors that represent the metrics for which the probability of the given changes being reliable should be
 #'   computed. These vectors hold the scores that each athlete recorded for each respective metric (at least one metric must be
 #'   passed to the function).
-#' @param reliability A vector of the measures of reliability (i.e. the ICC's) for each of the metrics included in the
-#'   "..." argument. This vector must contain the same number of elements as the number of metrics that have been
-#'   passed to the function in the "..." argument, and the reliability values must appear in the same order as the
-#'   metrics appear in the "..." argument.
+#' @param ICC A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same number
+#'   of elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values
+#'   must appear in the same order as the metrics appear in the "..." argument.
 #'
-#' @return A table for each metric, with each row being an athlete and each entry being the probability that the change that has
-#'   occurred is reliable, based on the RCI calculation.
+#' @return A data frame, with the subjects as rows and the metrics as columns, and each entry representing the probability that the
+#'   final measurement was a reliable change from the individual measurement.
 #'
 #' @example
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
@@ -42,7 +42,8 @@ PROBRC <- function(subject, trial, ..., ICC, initial, final) {
   initial_df <- input_df[c(initial), ]
   final_df <- input_df[c(final), ]
 
-  # A new data frame is created to store the probability that each final measurement was a reliable change from the initial measurement
+  # A new data frame is created, which will end up being the function output
+  # It will store the probability that each final measurement was a reliable change from the initial measurement
   output_df <- data.frame(subject)
 
   # For each column except that of the subjects in the data, we want to compute the between-athlete sd

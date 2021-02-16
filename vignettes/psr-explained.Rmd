@@ -10,15 +10,19 @@ vignette: >
 
 # 1. Motivation for Package
 
-The PerfSciReliability package is intended for coaches and analysts in the field of sports performance science. It aims to allow users to efficiently calculate metrics for assess measurement reliability as well as individual change in athletic performance. All functions take as input a data frame containing measurements taken on an ath (WE NEED TO TALK ABOUT THIS WORDING WITH MATT)
+The psr package is intended for coaches and analysts in the field of sports performance science. It aims to allow users to efficiently calculate metrics for assess measurement reliability as well as individual change in athletic performance. All functions take as its inputs vectors containing measurements taken on an ath (WE NEED TO TALK ABOUT THIS WORDING WITH MATT)
 
-PerfSciReliability can be used to assess measurement reliability via functions computing the typical error (TE), coefficient of variation (CV), and standard error of measurement (SEM) functions. In addition, the intraclass correlation coefficient (ICC_long) function builds on the ICC function in psych by taking data in long format as its input, saving the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICCs for multiple metrics at a time.
+psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on psych::ICC() by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once.
 
-Assessing the change in individual athletles is facilitated by the smallest worthwhile change (SWC) and minimal detectable change (MDC).  Finally, the STEN function takes each athlete's scores for every metric and standardizes them to a 0-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers. The following vignette will illustrate the use and intrepret the output of each function via example data sets.     
+The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics.  Individual-level metrics also appear in the package, in the form of the standard ten score (STEN) and probability of reliable change (PROBRC) functions. STEN() takes each athlete's scores for every metric and standardizes them to a 1-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers, while PROBRC() computes the probability that the change made by each athlete from one trial to another was reliable. This vignette illustrates the use and intreprets the output of each function via example data.     
 
 # 2. Reliability of Measurement Instrument
 
 The psr package includes four different functions for assessing reliability of measurements: TE(), CV(), SEM(), and ICC_long(). Each will be discussed in turn.
+
+```{r}
+library(psr)
+```
 
 ## 2.1. Typical Error: TE()
 
@@ -27,6 +31,7 @@ The Typical Error (TE) is the within-athlete variation of the athlete measuremen
 If more than two trials are being studied, the TE is the residual standard error of a linear model with the metric as the response and the subject and trial as independent variable, entered into the model as factors (Hopkins,2000). It represents the error involved in predicting the value of a metric based on who is being measured and which trial that athlete is on (LET'S WORK ON THIS SENTENCE).  
 
 The following data set consists of three different athletes performing three trials of a certain task, and three different metrics on biomechanical measurements are recorded:
+
 ```{r}
 subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
