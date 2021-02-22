@@ -19,21 +19,14 @@ The smallest worthwhile change (SWC) and minimal detectable change (MDC) functio
 In order to show the package at work, it must first be loaded.
 
 ```{r}
-library(tidyverse)
 library(psr)
 ```
-
-The tidyverse package is also loaded, as it is embedded into some of the functions in psr.
 
 # 2. Reliability of Measurement Instrument
 
 The psr package includes four different functions for assessing reliability of measurements: TE(), CV(), SEM(), and ICC_long(). Each will be discussed in turn. 
 
 *I found that there is not another package with the name psr, but there is a function called psr.
-
-```{r}
-library(psr)
-```
 
 ## 2.1. Typical Error: TE()
 
@@ -391,7 +384,7 @@ Yet again, the user knows exactly why the code he or she had just entered did no
 
 # 6. References
 
-* Need citations for tidyr and tidyverse packages
+* Need citation for tidyr package
 
 Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables.
 
