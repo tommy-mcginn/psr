@@ -2,12 +2,9 @@ Package: psr
 Type: Package
 Title: Functions for Analyzing Performance Science Data 
 Version: 0.1.0
-Author: Tommy McGinn
-Maintainer: Tommy McGinn <tmcginn1@nd.edu>
-Description: This package contains functions to compute statistics relevant to performance scientists, coaches, and
-athletes. The functions within the package that report group-wide statistics have to do with measurement instrument 
-reliability and individual change of athletes. There are also functions that apply a particular statistical concept to
-each measurement in the data.
+Author: Alan Huebner, Thomas McGinn, and Matthew Sisk
+Maintainer: Thomas McGinn <tmcginn1@nd.edu>
+Description: This package contains functions to compute statistics relevant to performance scientists, coaches, and athletes. The functions within the package that report group-wide statistics have to do with measurement instrument reliability and individual change of athletes. There are also functions that apply a particular statistical concept to each measurement in the data.
 Encoding: UTF-8
 License: Insert license here
 LazyData: true
