@@ -9,12 +9,12 @@
 #'
 #' @return A data frame, with the name of each metric situated above its calculated TE
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' TE(subject, trial, metric_1, metric_2, metric_3)
 #'
 #' @references Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
@@ -72,12 +72,12 @@ TE <- function(subject, trial, ...) {
 #'
 #' @return A data frame, with the name of each metric situated above its calculated CV
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' CV(subject, trial, metric_1, metric_2, metric_3)
 #'
 #' @references Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
@@ -140,12 +140,12 @@ CV <- function(subject, trial, ...) {
 #'
 #' @return A data frame, with the name of each metric situated above its calculated SEM
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95))
 #'
 #' @references Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables

@@ -1,4 +1,4 @@
-Package: PerfSciReliability
+Package: psr
 Type: Package
 Title: Reliability Functions for Performance Science Metrics 
 Version: 0.1.0

@@ -29,6 +29,15 @@ A data frame, with the name of each metric situated above its calculated SWC
 Computes the SWC for each vector of measurements that is passed to the function, for the subject and trial vectors,
   the desired effect size of the change, and the desired method of calculating the between-subject standard deviation
 }
+\examples{
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
+
+}
 \references{
 Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport
   Science and a Need for Change. Sports, 5(4), 87.

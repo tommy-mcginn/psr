@@ -31,6 +31,16 @@ A data frame, with the subjects as rows and the metrics as columns, and each ent
 For each change that an athlete records from one trial to another, the probability that the change is reliable is
   generated, along with asterisks for athletes that have achieved given probabilities of change.
 }
+\examples{
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+PROBRC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), initial = which(trial == "Trial 1"),
+final = which(trial == "Trial 2"))
+
+}
 \references{
 Ferger, K., & Büsch, D. (2018). Individual measurement of performance change in sports. Deutsche Zeitschrift Für
   Sportmedizin, 2018(02), 45-52.

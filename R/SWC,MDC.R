@@ -16,12 +16,12 @@
 #'
 #' @return A data frame, with the name of each metric situated above its calculated SWC
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
 #'
 #' @references Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport
@@ -106,12 +106,12 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #'
 #' @return A data frame, with the name of each metric situated above its calculated MDC
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.92, 0.98, 0.95), confidence = 0.95)
 #'
 #' @references Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of

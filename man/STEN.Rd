@@ -26,3 +26,16 @@ Converts each score of each metric passed to the function into its corresponding
   same purpose as standardizing the scores (i.e. converting all of the scores to z-scores), but might be easier for practitioners
   and coaches to understand.
 }
+\examples{
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+STEN(subject, trial, metric_1, metric_2, metric_3)
+
+}
+\references{
+Coaley, K. (2010). Statistics for psychological measurement. In An introduction to psychological assessment and
+  psychometrics (pp. 72-96). SAGE Publications Ltd, https://www.doi.org/10.4135/9781446221556.n4
+}

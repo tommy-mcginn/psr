@@ -15,13 +15,16 @@
 #' @return A data frame, with the subjects as rows and the metrics as columns, and each entry representing the original measurement
 #'   of the given metric having been converted to the unitless STEN score.
 #'
-#' @example
+#' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
 #' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
-#' metric_1 <- c(257, 268, 237, 275, 259, 263, 216, 287, 250)
-#' metric_2 <- c(1.11, 1.24, 0.89, 1.37, 1.21, 1.30, 0.75, 1.42, 1.15)
-#' metric_3 <- c(1272, 1493, 1072, 1046, 1198, 1165, 1478, 1370, 1335)
+#' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+#' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+#' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' STEN(subject, trial, metric_1, metric_2, metric_3)
+#'
+#' @references Coaley, K. (2010). Statistics for psychological measurement. In An introduction to psychological assessment and
+#'   psychometrics (pp. 72-96). SAGE Publications Ltd, https://www.doi.org/10.4135/9781446221556.n4
 #'
 #' @export
 STEN <- function(subject, trial, ...) {

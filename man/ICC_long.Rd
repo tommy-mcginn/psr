@@ -21,6 +21,15 @@ A list, with its contents being the ICC output (containing the six types of ICC'
 \description{
 Computes the ICC for each vector of measurements that is passed to the function, for the subject and trial vectors
 }
+\examples{
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+ICC_long(subject, trial, metric_1, metric_2, metric_3)
+
+}
 \references{
 Shrout, P. E., &amp; Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. Psychological
   Bulletin, 86(2), 420-428.

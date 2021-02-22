@@ -20,6 +20,15 @@ A data frame, with the name of each metric situated above its calculated TE
 \description{
 Computes the TE for each vector of measurements that is passed to the function, for the subject and trial vectors
 }
+\examples{
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+TE(subject, trial, metric_1, metric_2, metric_3)
+
+}
 \references{
 Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
 }

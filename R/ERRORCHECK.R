@@ -35,7 +35,7 @@ check_error <- function(subject, trial, ...) {
     # Produces an informative error message if any athlete has recorded two or more measurements for any trial
     data <- data.frame(subject, trial, ...)
 
-    data <- count(data, subject, trial)
+    data <- dplyr::count(data, subject, trial)
 
     if (length(unique(data$n)) != 1) {
 
