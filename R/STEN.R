@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
-#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+#' trial <- c(1, 2, 3, 1, 2, 3, 1, 2, 3)
 #' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
 #' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
 #' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
@@ -45,7 +45,7 @@ STEN <- function(subject, trial, ...) {
     metric <- full_df[, i]
 
     # The formula to convert the actual scores to the STEN scores is applied here, with the results rounded to 2 decimals
-    STEN <- round((((metric - mean(metric)) / sd(metric)) * 2) + 5.5, digits = 2)
+    STEN <- round((((metric - mean(metric)) / stats::sd(metric)) * 2) + 5.5, digits = 2)
 
     # These scores for each metric are added to the second data frame created, and named according to the metric they represent
     output_df <- cbind(output_df, unlist(STEN))

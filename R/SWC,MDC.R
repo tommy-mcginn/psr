@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
-#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+#' trial <- c(1, 2, 3, 1, 2, 3, 1, 2, 3)
 #' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
 #' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
 #' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
@@ -98,9 +98,9 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #' @param trial The vector that represents which trial each measurement came from
 #' @param ... Numeric vectors that represent the metrics for which the SEM should be computed. These vectors hold the scores that
 #'   each athlete recorded for each respective metric (at least one metric must be passed to the function).
-#' @param ICC A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same number
-#'   of elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values
-#'   must appear in the same order as the metrics appear in the "..." argument.
+#' @param ICC A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same
+#'   number of elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability
+#'   values must appear in the same order as the metrics appear in the "..." argument.
 #' @param confidence The degree of confidence the user wants to have that an improvement exceeding the MDC can be interpreted as
 #'   real change, and not the result of measurement error, based on the standard normal distribution. The default value is 0.95.
 #'
@@ -108,7 +108,7 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
 #'
 #' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
-#' trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3')
+#' trial <- c(1, 2, 3, 1, 2, 3, 1, 2, 3)
 #' metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
 #' metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
 #' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
