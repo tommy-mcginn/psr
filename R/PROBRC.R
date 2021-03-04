@@ -5,14 +5,14 @@
 #'
 #' @param subject The vector of athletes who recorded the results for each metric (can be a numeric or factor variable)
 #' @param trial The vector that represents which trial each measurement came from
-#' @param initial The trial to be considered the "before" (or baseline) measurements
-#' @param final The trial to be considered the "after" measurements (the trial we are comparing to the baseline)
 #' @param ... Numeric vectors that represent the metrics for which the probability of the given changes being reliable should be
 #'   computed. These vectors hold the scores that each athlete recorded for each respective metric (at least one metric must be
 #'   passed to the function).
 #' @param ICC A vector of the ICC's for each of the metrics included in the "..." argument. This vector must contain the same number
 #'   of elements as the number of metrics that have been passed to the function in the "..." argument, and the reliability values
 #'   must appear in the same order as the metrics appear in the "..." argument.
+#' @param initial The trial to be considered the "before" (or baseline) measurements
+#' @param final The trial to be considered the "after" measurements (the trial we are comparing to the baseline)
 #'
 #' @return A data frame, with the subjects as rows and the metrics as columns, and each entry representing the probability that the
 #'   final measurement was a reliable change from the individual measurement.
@@ -46,8 +46,16 @@ PROBRC <- function(subject, trial, ..., ICC, initial, final) {
   # It will store the probability that each final measurement was a reliable change from the initial measurement
   output_df <- data.frame(subject)
 
+  # Make a list for the baseline standard deviation calculations for each metric
+  SD_baseline <- list()
+
   # For each column except that of the subjects in the data, we want to compute the between-athlete sd
-  SD_baseline <- lapply(initial_df[, -1], stats::sd)
+  for (i in 2:ncol(initial_df)) {
+
+    SD <- stats::sd(initial_df[, i])
+    SD_baseline <- append(SD_baseline, values = SD)
+
+  }
 
   # Converting the ICC to a list (as opposed to a vector) makes the next for loop easier to calculate
   ICC <- as.list(ICC)
