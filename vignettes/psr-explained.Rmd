@@ -259,11 +259,9 @@ MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), con
 
 These MDC's represent changes that, if achieved, a practitioner could be 80% confident is an actual improvement, rather than being due to random chance alone. The important point to remember is that as one decreases the confidence level in MDC(), the MDC also decreases and might be easier for athletes to achieve, but the level of certainty one can have that a change equal to the MDC is a real change decreases as well.
 
-# 4. Individual Level Metrics
+# 4. Standard Ten Scores: STEN() 
 
-The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection, and they have represented group-wide concepts. Practitioners might also wish to conduct analysis at the individual level. To achieve this purpose, psr includes two functions: STEN() and PROBRC().
-
-## 4.1. Standard Ten Scores: STEN()
+The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection, and they have represented group-wide concepts. Practitioners might also wish to conduct analysis at the individual level. To achieve this purpose, psr includes the STEN() function. 
 
 Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN) scores of the athletes for each metric (Coaley, 2010). The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
 
@@ -287,33 +285,6 @@ It produces simple output that looks as follows for the same data that was used 
 ```
 
 This output lends insight into how well each athlete performed on each trial, compared to all of the measurements recorded in the data for the same metric. One can see that subject 1 recorded close to the mean of each metric for most of his or her measurements. In Trials 1 and 2, subject 2 recorded high measurements for all three metrics but low measurements in Trial 3, while the opposite was the case for subject 3. This function makes it easy to see how each athlete is performing relative to the other athletes in the data for each of his or her measurements, and how this performance differs across trials and metrics, respectively.
-
-# 4.2. Probability of Reliable Change: PROBRC()
-
-Similar to STEN(), PROBRC() calculates an individual-level metric. PROBRC() computes the probability that a given change from one trial to another was reliable, for each athlete in the data. This concept appears in Ferger & Büsch (2018). As in the other functions, this function takes the subject, trial, and metric vectors as inputs, in addition to the ICC's of each of the metrics. The user must make an additional specification when calling the function: he or she must indicate which trials in the data should represent the initial and final trials, respectively, that will be compared in the calculation of the probability of reliable change.
-
-The following example takes the same data as above:
-
-```{r}
-PROBRC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), initial = which(trial == "Trial 1"), final = which(trial == "Trial 2"))
-```
-
-As one can see, the user wants to see whether "Trial 2" was a reliable change from "Trial 1", for each athlete and metric. It yields the following output:
-
-```{r}
-# subject metric_1 metric_2 metric_3
-#       1        1        1        1
-#       1        1        1        1
-#       1        1        1        1
-#       2        1        1        1
-#       2        1        1        1
-#       2        1        1        1
-#       3        1        1        1
-#       3        1        1        1
-#       3        1        1        1
-```
-
-The probability calculations shown in the table are all rounded to two decimal places, meaning that any probability of greater than or equal to 0.995 will be appear as a probability of 1, as is shown in the output above. In effect, for each athlete's "Trial 2" measurements for each of the three metrics, one can be 100% certain that he or she has exhibited a reliable change from his or her  measurement in "Trial 1".
 
 # 5. Error Examples
 
