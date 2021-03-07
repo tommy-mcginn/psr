@@ -8,5 +8,5 @@ metric_1 <- c(31, 27, 33, 35, 42, 47, 40, 44, 63, 63, 28, 31, 43, 54, 44, 54, 68
               61, 61, 45, 52, 43, 44, 58, 48, 40, 44, 48, 47, 42, 52, 61, 45, 48, 43, 43, 52, 50, 52, 39, 40, 52, 58, 42, 45, 77, 67)
 
 testthat::test_that("SEM", {
-  testthat::expect_equal(round(psr::SEM(subject_1, trial_1, metric_1, ICC = 0.88), 1)[1, 1], 3.5)
+  testthat::expect_equal(round(SEM(subject_1, trial_1, metric_1, ICC = 0.88), 1)[1, 1], 3.5)
 })

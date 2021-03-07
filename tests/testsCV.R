@@ -9,9 +9,9 @@ trial_2 <- c(1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2)
 metric_2 <- c(57.5, 57.4, 65.6, 63.2, 67.0, 66.5, 68.5, 69.9, 70.8, 72.8, 72.2, 70.1, 74.9, 75.6, 76.0, 75.2, 76.1, 72.8, 83.1, 79.0)
 
 testthat::test_that("CV", {
-  testthat::expect_equal(round(psr::CV(subject_1, trial_1, metric_1)[1, 1], 1), 4.2)
+  testthat::expect_equal(round(CV(subject_1, trial_1, metric_1)[1, 1], 1), 4.2)
 })
 
 testthat::test_that("CV", {
-  testthat::expect_equal(round(psr::CV(subject_2, trial_2, metric_2)[1, 1], 1), 2.0)
+  testthat::expect_equal(round(CV(subject_2, trial_2, metric_2)[1, 1], 1), 2.0)
 })
