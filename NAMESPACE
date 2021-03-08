@@ -3,7 +3,6 @@
 export(CV)
 export(ICC_long)
 export(MDC)
-export(PROBRC)
 export(SEM)
 export(STEN)
 export(SWC)

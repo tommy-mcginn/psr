@@ -1,0 +1,6 @@
+citHeader("To cite psr in publications")
+
+citEntry(entry = "R Package",
+         title = "{psr}: Functions for Analyzing Performance Science Data",
+         author = personList(as.person("Alan Huebner"), as.person("Thomas McGinn"), as.person("Matthew Sisk")),
+         year = "2021")
