@@ -1,6 +1,6 @@
 title: "psr Explained"
-author: "Tommy McGinn"
-date: "03/02/2021"
+authors: "Alan Huebner", "Tommy McGinn", and "Matthew Sisk"
+date: "03/08/2021"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{psr Explained}
@@ -14,19 +14,11 @@ The psr package is intended for coaches and analysts in the field of sports perf
 
 psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on psych::ICC() by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once.
 
-The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics. Individual-level metrics also appear in the package, in the form of the standard ten score (STEN) and probability of reliable change (PROBRC) functions. STEN() takes each athlete's scores for every metric and standardizes them to a 1-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers, while PROBRC() computes the probability that the change made by each athlete from one trial to another was reliable. This vignette illustrates the use and intreprets the output of each function via example data.
-
-In order to show the package at work, it must first be loaded.
-
-```{r}
-library(psr)
-```
+The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics. An Individual-level metric also appears in the package, in the form of the standard ten score (STEN) function. STEN() takes each athlete's scores for every metric and standardizes them to a 1-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers. This vignette illustrates the use and intreprets the output of each function via example data.
 
 # 2. Reliability of Measurement Instrument
 
-The psr package includes four different functions for assessing reliability of measurements: TE(), CV(), SEM(), and ICC_long(). Each will be discussed in turn. 
-
-*I found that there is not another package with the name psr, but there is a function called psr. (MLS: I think that is probably OK)
+The psr package includes four different functions for assessing reliability of measurements: TE(), CV(), SEM(), and ICC_long(). Each will be discussed in turn.
 
 ## 2.1. Typical Error: TE()
 
@@ -51,8 +43,6 @@ The TE() function is called by specifying the rows containing the subjects, tria
 ```{r}
 TE(subject, trial, metric_1, metric_2, metric_3)
 ```
-
-(HOW TO GET THE PACKAGE TO SHOW UP IN THE VIGNETTE)
 
 ```{r}
 # metric_1 metric_2 metric_3
