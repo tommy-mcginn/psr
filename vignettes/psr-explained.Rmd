@@ -41,7 +41,7 @@ metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 The TE() function is called by specifying the rows containing the subjects, trials, and metrics:
 
 ```{r}
-TE(subject, trial, metric_1, metric_2, metric_3)
+psr::TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 ```{r}
@@ -56,7 +56,7 @@ TE is expressed in terms of the units of the original metric. Thus, the TE of me
 The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are inconsistent explanations of the CV in the performance science literature, and this package follows the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error. Thus, the TE is expressed in absolute terms, while the CV is expressed in percentage terms. The CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
 
 ```{r}
-CV(subject, trial, metric_1, metric_2, metric_3)
+psr::CV(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 ```{r}
@@ -75,7 +75,7 @@ The Standard Error of Measurement (SEM) is similar to the TE and CV, and is a wa
 Running the code for SEM(), using the same data as in the case of the TE() and CV():
 
 ```{r}
-SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99))
+psr::SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99))
 ```
 
 As noted earlier, SEM() adds one additional argument to those in TE() and CV(). This addition is a list of the individual ICC values for the metrics, which must be entered in order. In the above example, the ICC values for metric_1, metric_2, and metric_3 are 0.92, 0.98, and 0.95, respectively.
@@ -98,7 +98,7 @@ ICC_long() is simply a wrapper for psych::ICC(), but has two key differences: it
 To illustrate ICC_long() at work, the same example as above can be employed:
 
 ```{r}
-ICC_long(subject, trial, metric_1, metric_2, metric_3)
+psr::ICC_long(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
@@ -193,7 +193,7 @@ psych::ICC(data)
 Conversely, using ICC_long(), the user must simply enter the subject and trial vectors before entering the five vectors containing the measurements for each metric, subsequently showing the ICC output for all five metrics after just one function call. In short, the user only needs to run the following code once:
 
 ```{r, eval = FALSE}
-ICC_long(subject, trial, metric_1, metric_2, metric_3, metric_4, metric_5)
+psr::ICC_long(subject, trial, metric_1, metric_2, metric_3, metric_4, metric_5)
 ```
 
 This simplified process cuts down considerably on the time and effort required by the user in order to see the ICC output for all five metrics. In addition, all of the ICC outputs for the various metrics can be seen one directly after another, making it easier to compare the reliabilities of each metric. 
@@ -211,7 +211,7 @@ For the SWC function, the user can choose which method should be used for the co
 Computing the SWC for the same data as in the prior three functions looks like this:
 
 ```{r}
-SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
+psr::SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
 ```
 
 ```{r}
@@ -230,7 +230,7 @@ With the same goal in mind as the SWC of capturing individual change, the Minima
 Using this formula with the usual data, the resulting output is:
 
 ```{r}
-MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95)
+psr::MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95)
 ```
 
 ```{r}
@@ -241,7 +241,7 @@ MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), con
 There is one important thing to note from this output. The MDC is larger than the SWC for each metric, which sheds light on the fact that the MDC represents a high threshold for improvement. If an athlete were to achieve a change equal to the MDC, with the default confidence level of 95%, one could be 95% confident that the change was not the result of error. One might not need to have that degree of certainty, and might prefer to set a benchmark for their athletes that is more achievable. Changing the confidence level from 95% to 80% lowers the MDC of each metric considerably, as shown in the code and output below: 
 
 ```{r}
-MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.80)
+psr::MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.80)
 ```
 
 ```{r}
@@ -258,7 +258,7 @@ The previous functions have focused on setting benchmarks for athletes and measu
 Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN) scores of the athletes for each metric (Coaley, 2010). The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
 
 ```{r}
-STEN(subject, trial, metric_1, metric_2, metric_3)
+psr::STEN(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 It produces simple output that looks as follows for the same data that was used to demonstrate all of the previous functions:
