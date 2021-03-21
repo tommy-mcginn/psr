@@ -5,6 +5,10 @@
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+There were no ERRORs, WARNINGs, or NOTEs.
+
+## Downstream dependencies
+
+There are currently no downstream dependencies for this package.
 
 * This is a new release.
