@@ -177,7 +177,7 @@ In reality many data are actually in "long" form, so that there are multiple row
 |    3    | Trial 2 |  213  |
 |    3    | Trial 3 |  218  |
 
-The ICC function in psr explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" form (using tidyr::pivot_wider()), so that psych::ICC() can be run on each metric, displaying the same output that psych::ICC() would show. In other words, our ICC function is a "wrapper" function for psych::ICC(), which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in long form, as long as the user can properly extract these vectors from the data.
+The ICC function in psr explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" form (using tidyr::pivot_wider()), so that psych::ICC() can be run on each metric, displaying the same output that psych::ICC() would show (Wickham & Henry, 2020). In other words, our ICC function is a "wrapper" function for psych::ICC(), which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in long form, as long as the user can properly extract these vectors from the data.
 
 ### 2.4.2. Allowing More Metrics than psych::ICC()
 
@@ -225,7 +225,7 @@ Another application of the SWC is comparing it to the TE as a method of determin
 
 ## 3.2. Minimal Detectable Change: MDC()
 
-With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It also appears in Beekhuizen et al. (2009), de Vet et al. (2006). *NEED CITATIONS  
+With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It also appears in Beekhuizen et al. (2009), de Vet et al. (2006).  
 
 This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by chance or error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level.
 
@@ -349,15 +349,17 @@ Yet again, the user knows exactly why the code did not run properly.
 
 # 6. References
 
-* Need citation for tidyr package
-
 Atkinson, G., & Nevill, A. M. (1998). Statistical Methods For Assessing Measurement Error (Reliability) in Variables.
+
+Beekhuizen, K., Davis, M. D., Kolber, M. J., Cheng, M. (2009). Test-Retest Reliability and Minimal Detectable Change of the Hexagon Agility Test. The Journal of Strength and Conditioning Research, 23(7), 2167-2171.
 
 Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport Science and a Need for Change. Sports, 5(4), 87.
 
 Coaley, K. (2010). Statistics for psychological measurement. In An introduction to psychological assessment and psychometrics (pp. 72-96). SAGE Publications Ltd, https://www.doi.org/10.4135/9781446221556.n4
 
 Conway, B. (2017). Smallest Worthwhile Change. https://www.scienceforsport.com/smallest-worthwhile-change/
+
+de Vet, H. C., Terwee, C. B., Ostelo, R.W., Beckerman, H., Knol D. L., Bouter, L. M. (2006). Minimal changes in health status questionnaires: distinction between minimally detectable change and minimally important change. Health and Quality of Life Outcomes, 4(54). 
 
 Ferger, K., & Büsch, D. (2018). Individual measurement of performance change in sports. Deutsche Zeitschrift Für Sportmedizin, 2018(02), 45-52.
 
@@ -370,3 +372,5 @@ Revelle W (2020). psych: Procedures for Psychological, Psychometric, and Persona
 Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
 
 Shrout, P. E., &amp; Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. Psychological Bulletin, 86(2), 420-428.
+
+Wickham, H., & Henry, L. (2020). tidyr: Tidy Messy Data. R package version 1.1.0. https://CRAN.R-project.org/package=tidyr
