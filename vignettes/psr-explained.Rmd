@@ -10,20 +10,21 @@ vignette: >
 
 # 1. Motivation for Package
 
-The psr package is intended for coaches and analysts in the field of sports performance science. It aims to allow users to efficiently calculate metrics to assess measurement reliability as well as individual change in athletic performance. For example, a strength and conditioning coach might be interested in assessing a group of athletes development speed via a sprint test. Athletes may perform the sprint test on three different occasions, yielding data such as the following: 
+The psr package is intended for coaches and analysts in the field of sports performance science. It aims to allow users to efficiently calculate metrics to assess measurement reliability as well as individual change in athletic performance. For example, a strength and conditioning coach might be interested in assessing a group of athletes development speed via a sprint test. Athletes may perform the 100-meter sprint test on three different occasions, yielding data such as the following:
 
-(TOMMY, CAN YOU PUT IN A TABLE EXAMPLE with 6 ROWS, 2 SUBJECTS on THREE)
+| Subject | Trial 1 | Trial 2 | Trial 3 |
+|--------:|:-------:|:-------:|:--------|
+|    1    |  10.0   |  12.0   |   10.9  |
+|    2    |  10.1   |  11.3   |   11.1  |
 
 Then, the coach would be interested in one or more of the following tasks:
 1. Assess the reliability, or stability of the measurements to verify that they are not contaminated by excessive error.
 2. Determine which athletes showed a statsistically significant improvement in sprint time compared to a baseline measurement.
 3. Determine which athletes displayed a practically significant improvement in sprint time.
 
-All functions take as inputs vectors containing measurements taken on an athletes performing strength and agility tests. (DO WE NEED THIS?)
-
 Specifically, the psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on psych::ICC() by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once.
 
-The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics. An Individual-level metric also appears in the package, in the form of the standard ten score (STEN) function. STEN() takes each athlete's scores for every metric and standardizes them to a 1-10 scale, allowing the user to easily see an athlete's strengths and weaknesses relative to his or her peers. (DO WE NEED THE DETAILED INFO IN THE PREVIOUS SENTENCES? Maybe just list the functions) This vignette illustrates the use and intreprets the output of each function via example data.
+The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics. An Individual-level metric also appears in the package, in the form of the standard ten score (STEN) function. This vignette illustrates the use and intreprets the output of each function via example data.
 
 # 2. Reliability of Measurement Instrument
 
@@ -89,7 +90,7 @@ psr::SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99)
 
 As noted earlier, SEM() adds one additional argument to those in TE() and CV(). This addition is a list of the individual ICC values for the metrics, which must be entered in order. In the above example, the ICC values for metric_1, metric_2, and metric_3 are 0.92, 0.98, and 0.95, respectively.
 
-Running the code, the familiar form of the output is displayed: (CAN WE ADD AN INTERPRETATION? )
+Running the code, the familiar form of the output is displayed, It shows the SEM for each metric, which is useful as a way of comparing the reliability of metrics.
 
 ```{r}
 # metric_1 metric_2 metric_3
