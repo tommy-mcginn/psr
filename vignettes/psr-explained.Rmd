@@ -1,6 +1,6 @@
 title: "psr Explained"
-authors: "Alan Huebner", "Tommy McGinn", and "Matthew Sisk"
-date: "03/08/2021"
+authors: "Thomas McGinn", "Alan Huebner", and "Matthew Sisk"
+date: "03/30/2021"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{psr Explained}
@@ -103,7 +103,7 @@ Another point that is important to emphasize is that for any metric, the confide
 
 ## 2.4. Intraclass Correlation Coefficient: ICC_long()
 
-The Intraclass Correlation Coefficient (ICC) is a measure of reliability that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different experimental designs, as detailed in. The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
+The Intraclass Correlation Coefficient (ICC) is a measure of reliability for a set of measurements that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different experimental designs, as detailed in Shrout & Fleiss (1979). The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
 
 ICC_long() is simply a wrapper for psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()), both of which are explained in detail below (Revelle, 2020).
 
@@ -239,7 +239,7 @@ Another application of the SWC is comparing it to the TE as a method of determin
 
 ## 3.2. Minimal Detectable Change: MDC()
 
-With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It also appears in Beekhuizen et al. (2009), de Vet et al. (2006).  
+With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It appears elsewhere in the literature as well (Beekhuizen et al., 2009; de Vet et al., (2006).  
 
 This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by chance or error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level.
 
@@ -271,7 +271,7 @@ These MDC's represent changes that, if achieved, a practitioner could be 80% con
 
 The previous functions have focused on setting benchmarks for athletes and measuring the reliability of the instruments involved in the data collection, and they have represented group-wide concepts. Practitioners might also wish to conduct analysis at the individual level. To achieve this purpose, psr includes the STEN() function. 
 
-Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN) scores of the athletes for each metric (Coaley, 2010). The STEN scores range from one to ten, with a mean of 5.5. The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
+Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN) scores of the athletes for each metric. The STEN scores range from one to ten, with a mean of 5.5. This concept is often used in psychological and personality tests, but it can be applied to performance science as well (Glen, 2015). The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs:
 
 ```{r}
 psr::STEN(subject, trial, metric_1, metric_2, metric_3)
@@ -369,13 +369,13 @@ Beekhuizen, K., Davis, M. D., Kolber, M. J., Cheng, M. (2009). Test-Retest Relia
 
 Bernards, J., Sato, K., Haff, G., & Bazyler, C. (2017). Current Research and Statistical Practices in Sport Science and a Need for Change. Sports, 5(4), 87.
 
-Coaley, K. (2010). Statistics for psychological measurement. In An introduction to psychological assessment and psychometrics (pp. 72-96). SAGE Publications Ltd, https://www.doi.org/10.4135/9781446221556.n4
-
 Conway, B. (2017). Smallest Worthwhile Change. https://www.scienceforsport.com/smallest-worthwhile-change/
 
 de Vet, H. C., Terwee, C. B., Ostelo, R.W., Beckerman, H., Knol D. L., Bouter, L. M. (2006). Minimal changes in health status questionnaires: distinction between minimally detectable change and minimally important change. Health and Quality of Life Outcomes, 4(54). 
 
 Ferger, K., & Büsch, D. (2018). Individual measurement of performance change in sports. Deutsche Zeitschrift Für Sportmedizin, 2018(02), 45-52.
+
+Glen, S. (2015). Stephanie Glen. "STEN Score" From StatisticsHowTo.com: Elementary Statistics for the rest of us! https://www.statisticshowto.com/sten-score/
 
 Hopkins, W. G. (2000). A new view of statistics. Internet Society for Sport Science: http://www.sportsci.org/resource/stats/.
 
