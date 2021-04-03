@@ -10,3 +10,4 @@ metric_1 <- c(31, 27, 33, 35, 42, 47, 40, 44, 63, 63, 28, 31, 43, 54, 44, 54, 68
 testthat::test_that("SEM", {
   testthat::expect_equal(round(SEM(subject_1, trial_1, metric_1, ICC = 0.88), 1)[1, 1], 3.5)
 })
+

@@ -78,7 +78,7 @@ Using the same data as in the section above, it is seen that the CV of metric_2 
 
 ## 2.3. Standard Error of Measurement: SEM()
 
-The Standard Error of Measurement (SEM) is similar to the TE and CV, and is a way of quantifying the absolute reliability of a metric. It is the deviation around the true mean. Unlike the two previous measurements: SEM utilizes the ICC, which is another measure of reliability. The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC), as described in Atkinson & Nevill (1998).
+The Standard Error of Measurement (SEM) is similar to the TE and CV, and is a way of quantifying the absolute reliability of a metric. It is the deviation around the true mean. Unlike the two previous measurements: SEM utilizes the ICC, which is another measure of reliability. The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC), as described in Atkinson & Nevill (1998) and de Vet et al. (2006), among others.
 
 ![Alt text] (/Users/tmcginn/Desktop/Unknown-1.png)
 
@@ -239,7 +239,7 @@ Another application of the SWC is comparing it to the TE as a method of determin
 
 ## 3.2. Minimal Detectable Change: MDC()
 
-With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It appears elsewhere in the literature as well (Beekhuizen et al., 2009; de Vet et al., (2006).  
+With the same goal in mind as the SWC of capturing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018). It appears elsewhere in the literature as well (Beekhuizen et al., 2009; de Vet et al., 2006; Bernards et al., 2017).  
 
 This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by chance or error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level.
 
