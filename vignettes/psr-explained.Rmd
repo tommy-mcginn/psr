@@ -218,7 +218,7 @@ The SWC() and MDC() functions allow practitioners to set benchmarks for athletes
 
 The Smallest Worthwhile Change (SWC) is a measure of the smallest change an athlete would need to exhibit from one trial (or set of trials) to another trial (or set of trials) in order for it to be considered worthwhile (i.e. practically meaningful), rather than merely the result of random or measurement error. It is computed by multiplying the between-athlete standard deviation by an effect size specified by the user (the default effect size is 0.2), as explained in Bernards et al. (2017). 
 
-There are other interpretations of the SWC in the literature. For example, Paton & Hopkins (2005) utilize the typical percentage error (the typical error as a percentage of a mean) instead of the between-athlete standard deviation, and multiply this number by 0.5 to obtain the SWC in percentage terms. Other studies also use the TE in its calculation of the SWC, but multiply it by 1.65 (or 1.96) * the square root of 2, which represents a substantially larger effect size than the one we use (Mann et al., 2016; Mann et al., 2014). This package uses the interpretation of the statistic found in Bernards et al. (2017), as it represents a way of examining change that is distinct from the MDC, which is also included in this package. This approach is found in other studies as well, including Swinton et al. (2018). 
+There are other interpretations of the SWC in the literature. For example, a couple of studies utilize the typical percentage error (the typical error as a percentage of a mean) instead of the between-athlete standard deviation, and multiply this number by 0.5 to obtain the SWC in percentage terms (Hopkins, 2005; Paton & Hopkins, 2005). Other studies also use the TE in its calculation of the SWC, but multiply it by 1.65 (or 1.96) * the square root of 2, which represents a substantially larger effect size than the one we use (Mann et al., 2016; Mann et al., 2014). This package uses the interpretation of the statistic found in Bernards et al. (2017), as it represents a way of examining change that is distinct from the MDC, which is also included in this package. This approach is found in other studies as well, including Swinton et al. (2018). 
 
 For the SWC function, the user can choose which method should be used for the computation of the between-athlete standard deviation involved in the formula. Does the user want to average each subject's values and use the standard deviation of these averages (the default), or should only each subject's maximum or minimum value be considered? This is the purpose of the group_by and summarize functions from the dplyr package that are used inside of the SWC function.
 
@@ -379,6 +379,8 @@ Glen, S. (2015). Stephanie Glen. "STEN Score" From StatisticsHowTo.com: Elementa
 
 Hopkins, W. G. (2000). A new view of statistics. Internet Society for Sport Science: http://www.sportsci.org/resource/stats/.
 
+Hopkins, W. G. (2005). Competitive Performance of Elite Track-and-Field Athletes: Variability and Smallest Worthwhile Enhancements. SportScience, 9, 17-20.
+
 Hopkins, W. G. (2000). Measures of Reliability in Sports Medicine and Science. Sports Medicine, 30(5), 375-381.
 
 Mann J. B., Ivey, P. A., Brechue, W. F., Mayhew, J. L. (2014). Reliability and Smallest Worthwhile Difference of the NFL-225 Test in NCAA Division I Football Players. Journal of Strength and Conditioning Research, 28(5), 1427-1432.
@@ -387,11 +389,11 @@ Mann J. B., Ivey, P. A., Mayhew, J. L., Schumacher, R. M., Brechue, W. F. (2016)
 
 Revelle W (2020). psych: Procedures for Psychological, Psychometric, and Personality Research. Northwestern University, Evanston, Illinois. R package version 2.0.12, https://CRAN.R-project.org/package=psych.
 
-Riemann, B. L., &amp; Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
+Riemann, B. L., & Lininger, M. R. (2018). Statistical Primer for Athletic Trainers: The Essentials of Understanding Measures of Reliability and Minimal Important Change. Journal of Athletic Training, 53(1), 98-103.
 
-Paton, C. D., Hopkins, W. G. (2005). Competitive Performance of Elite Olympic-Distance Triathletes: Reliability and Smallest Worthwhile Enhancement. SportScience, 9, 1-5.
+Paton, C. D., & Hopkins, W. G. (2005). Competitive Performance of Elite Olympic-Distance Triathletes: Reliability and Smallest Worthwhile Enhancement. SportScience, 9, 1-5.
 
-Shrout, P. E., &amp; Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. Psychological Bulletin, 86(2), 420-428.
+Shrout, P. E., & Fleiss, J. L. (1979). Intraclass correlations: Uses in assessing rater reliability. Psychological Bulletin, 86(2), 420-428.
 
 Swinton, P. A., Hemingway, B. S., Saunders, B., Gualano, B., Dolan, E. (2018). A Statistical Framework to Interpret Individual Response to Intervention: Paving the Way for Personalized Nutrition and Exercise Prescription. Frontiers in Nutrition. 5(41), 1-14.
 
