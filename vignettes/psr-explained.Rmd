@@ -8,7 +8,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# 1. Motivation for Package (CAN WE MAKE THIS FONT SMALLER?)
+# 1. Motivation for Package
 
 The psr package is intended for coaches and analysts in the field of sports performance science. It aims to allow users to efficiently calculate metrics to assess measurement reliability as well as individual change in athletic performance. For example, a strength and conditioning coach might be interested in assessing a group of athletes' speed development via a sprint test. For this taks, athletes may perform the 100-meter sprint test on three different occasions, yielding data such as the following:
 
@@ -22,9 +22,7 @@ Then, the coach would be interested in one or more of the following tasks:
 2. Determine which athletes showed a statsistically significant improvement in sprint time compared to a baseline measurement.
 3. Determine which athletes displayed a practically significant improvement in sprint time.
 
-Specifically, psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on the psych::ICC() function by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once.
-
-The smallest worthwhile change (SWC) and minimal detectable change (MDC) functions assess individual change of athletes, but are still group-wide metrics (I THINK THE DISTINCTION BETWEEN INDIVIDUAL AND GROUP LEVEL MIGHT BE A BIT CONFUSING AND UNNECESSARY). An Individual-level metric also appears in the package, in the form of the standard ten score (STEN) function. This vignette illustrates the use and intreprets the output of each function via example data.
+Specifically, psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on the psych::ICC() function by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once. This vignette illustrates the use and intreprets the output of each function via example data.
 
 (CAN WE GIVE A HEADS UP SOMEWHERE IN THE INTRO THAT WE WILL BE REFERENCING HOPKINS A LOT?)
 
