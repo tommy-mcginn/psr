@@ -26,7 +26,13 @@ Then, the coach would be interested in one or more of the following tasks:
 
 Specifically, psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on the psych::ICC() function by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once. This vignette illustrates the use and intreprets the output of each function via example data.
 
-Much of the work comes from the literature of Will G. Hopkins, but several other studies by researchers around the world are also credited with the statistical concepts featured throughout this package.
+Several of the methods come from the literature of Hopkins (2000), and other well-known sources such as Atkinson & Nevill (1998).
+
+First, the package is loaded:
+
+```{r}
+library(psr)
+```
 
 # 2. Reliability of Measurement Instrument
 
@@ -51,7 +57,7 @@ metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 The TE() function is called by specifying the rows containing the subjects, trials, and metrics:
 
 ```{r}
-psr::TE(subject, trial, metric_1, metric_2, metric_3)
+TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 TE is expressed in terms of the units of the original metric. Thus, the TE of metric_3 is much larger than the TE's of the other two metrics, but that is largely due to the fact that metric_3 is on a different scale than metric_1 and metric_2.
@@ -61,26 +67,19 @@ TE is expressed in terms of the units of the original metric. Thus, the TE of me
 The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are inconsistent explanations of the CV in the performance science literature, and this package follows the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error. In other words, the TE is expressed in absolute terms, while the CV represents the same statistic expressed as a percentage of the mean of the data. The CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
 
 ```{r}
-psr::CV(subject, trial, metric_1, metric_2, metric_3)
+CV(subject, trial, metric_1, metric_2, metric_3)
 ```
 
-Using the same data as in the section above, it is seen that the CV of metric_2 is actually much larger than the CV's of the other two metrics. Hopkins notes that the CV for a test will typically be 1-5% (Hopkins, 2000). The CV's of metric_1 and metric_3, respectively, fall within this range, while the CV of metric_2 does not. This underscores the fact that metric_2 has the smallest TE of any of the three metrics largely because all of its measurements are much smaller in magnitude than the measurements of the other two metrics, meaning that its variation is lower in absolute terms than the variation of the other two metrics. As a percentage of its mean, however, metric_2 appears to be much less reliable than both metric_1 and metric_3.   
-
-```{r}
-# metric_1 metric_2 metric_3
-# 1.888758 20.37707 2.773974
-```
-
-Using the same data as in the section above, it is seen that the CV of metric_2 is actually much larger than the CV's of the other two metrics. Hopkins notes that the CV for a test will typically be 1-5% (Hopkins, 2000). The CV's of metric_1 and metric_3, respectively, fall within this range, while the CV of metric_2 does not. (CAN WE CUT THE FOLLOWING SENTENCES?) This underscores the fact that metric_2 has the smallest TE of any of the three metrics largely because all of its measurements are much smaller in magnitude than the measurements of the other two metrics, meaning that its variation is lower in absolute terms than the variation of the other two metrics. As a percentage of its mean, however, metric_2 appears to be much less reliable than both metric_1 and metric_3.
+Using the same data as in the section above, it is seen that the CV of metric_2 is actually much larger than the CV's of the other two metrics. Hopkins notes that the CV for a test will typically be 1-5% (Hopkins, 2000). The CV's of metric_1 and metric_3, respectively, fall within this range, while the CV of metric_2 does not.
 
 ## 2.3. Standard Error of Measurement: SEM()
 
 The Standard Error of Measurement (SEM) is similar to the TE and CV, and is a way of quantifying the absolute reliability of a metric. It is the deviation around the true mean. Unlike the two previous measurements: SEM utilizes the ICC, which is another measure of reliability. The formula for the SEM is the between-subject standard deviation of each athlete's scores multiplied by root (1 - ICC), as described in Atkinson & Nevill (1998) and de Vet et al. (2006), among others.
 
-We call SEM() function, using the same data as in the case of the TE() and CV():
+The SEM() function is called, using the same data as in the case of the TE() and CV():
 
 ```{r}
-psr::SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99))
+SEM(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99))
 ```
 
 As noted earlier, SEM() adds one additional argument to those in TE() and CV(). This addition is a list of the individual ICC values for the metrics, which must be entered in order. In the above example, the ICC values for metric_1, metric_2, and metric_3 are 0.92, 0.98, and 0.95, respectively.
@@ -95,109 +94,15 @@ Another point that is important to emphasize is that for any metric, the confide
 
 The Intraclass Correlation Coefficient (ICC) is a measure of reliability for a set of measurements that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different experimental designs, as detailed in Shrout & Fleiss (1979). The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
 
-ICC_long() is simply a wrapper for psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics (as opposed to just one in psych::ICC()), and it takes data in long format as its inputs (as opposed to wide format in psych::ICC()), both of which are explained in detail below (Revelle, 2020).
+ICC_long() is simply a wrapper for psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics in a single call, and it takes data in long format as its inputs (Revelle, 2020), both of which are explained in detail below.
 
 To illustrate ICC_long() at work, the same example as above can be employed. The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
 
-```{r}
-psr::ICC_long(subject, trial, metric_1, metric_2, metric_3)
+```{r, warning=FALSE, message=FALSE}
+ICC_long(subject, trial, metric_1, metric_2, metric_3)
 ```
-
-(CAN YOU SUPRESS THE WARNINGS THAT ARE THROWN HERE?)
-The function takes the same inputs as TE() and CV(), but yields output that takes a very different form:
-
-```{r}
-# $metric_1
-# Call: psych::ICC(x = df)
-
-# Intraclass correlation coefficients 
-#                          type  ICC   F df1 df2       p lower bound upper bound
-# Single_raters_absolute   ICC1 0.98 167   2   6 5.5e-06        0.91           1
-# Single_random_raters     ICC2 0.98 167   2   4 1.4e-04        0.91           1
-# Single_fixed_raters      ICC3 0.98 167   2   4 1.4e-04        0.88           1
-# Average_raters_absolute ICC1k 0.99 167   2   6 5.5e-06        0.97           1
-# Average_random_raters   ICC2k 0.99 167   2   4 1.4e-04        0.97           1
-# Average_fixed_raters    ICC3k 0.99 167   2   4 1.4e-04        0.96           1
-
-#  Number of subjects = 3     Number of Judges =  3
-```
-
-```{r}
-# $metric_2
-# Call: psych::ICC(x = df)
-
-# Intraclass correlation coefficients 
-#                          type  ICC  F df1 df2      p lower bound upper bound
-# Single_raters_absolute   ICC1 0.82 14   2   6 0.0051        0.38        0.99
-# Single_random_raters     ICC2 0.82 14   2   4 0.0147        0.38        0.99
-# Single_fixed_raters      ICC3 0.82 14   2   4 0.0147        0.27        0.99
-# Average_raters_absolute ICC1k 0.93 14   2   6 0.0051        0.64        1.00
-# Average_random_raters   ICC2k 0.93 14   2   4 0.0147        0.64        1.00
-# Average_fixed_raters    ICC3k 0.93 14   2   4 0.0147        0.52        1.00
-
-#  Number of subjects = 3     Number of Judges =  3
-```
-
-```{r}
-# $metric_3
-# Call: psych::ICC(x = df)
-
-# Intraclass correlation coefficients 
-#                          type  ICC   F df1 df2       p lower bound upper bound
-# Single_raters_absolute   ICC1 0.98 143   2   6 8.7e-06        0.90           1
-# Single_random_raters     ICC2 0.98 143   2   4 1.9e-04        0.90           1
-# Single_fixed_raters      ICC3 0.98 143   2   4 1.9e-04        0.87           1
-# Average_raters_absolute ICC1k 0.99 143   2   6 8.7e-06        0.96           1
-# Average_random_raters   ICC2k 0.99 143   2   4 1.9e-04        0.96           1
-# Average_fixed_raters    ICC3k 0.99 143   2   4 1.9e-04        0.95           1
-
-#  Number of subjects = 3     Number of Judges =  3
-```
-(I'M SEEING WHAT APPEARS TO BE THE SAME SET OF RESULTS TWICE...)
 
 The output above is simply a list of the ICC's for each metric. Based on the ICC's, metric_1 and metric_3 each exhibit nearly perfect reliability, while metric_2 is noticeably less reliable, which is the same conclusion that can be drawn from the CV's of the metrics. The choice of which of the six ICC forms to use for the data entered is left to the user. Criteria for making this decision is discussed in Shrout & Fleiss (1979).
-
-While psr::ICC_long() builds off psych:ICC(), there are differences between the two functions. First, the ICC function in the psych package takes an entire dataset as its only input. In addition, it also requires that the data be in "wide" form, so that each subject is its own row, the trials represent the columns, and the scores the subjects record fill in the entries of the data. A table in "wide" form looks like this:
-
-| Subject | Trial 1 | Trial 2 | Trial 3 |
-|--------:|:-------:|:-------:|:--------|
-|    1    |   250   |   258   |   252   |
-|    2    |   279   |   270   |   277   |
-|    3    |   218   |   213   |   218   |
-
-In reality many data are actually in "long" form, so that there are multiple rows for each subject and a column representing which trial each measurement came from. A data table in "long form" looks like this:
-
-| Subject |  Trial  | Score |
-|--------:|:-------:|:------|
-|    1    | Trial 1 |  250  |
-|    1    | Trial 2 |  258  |
-|    1    | Trial 3 |  252  |
-|    2    | Trial 1 |  279  |
-|    2    | Trial 2 |  270  |
-|    2    | Trial 3 |  277  |
-|    3    | Trial 1 |  218  |
-|    3    | Trial 2 |  213  |
-|    3    | Trial 3 |  218  |
-
-The ICC function in psr explicitly asks for the individual vectors corresponding to the subjects, trial, and measurements of each metric for which the user wants to see the ICC output, then puts each metric into its own "long" data frame with the subject and trial vectors, and finally converts this data frame into "wide" form (using tidyr::pivot_wider()), so that psych::ICC() can be run on each metric, displaying the same output that psych::ICC() would show (Wickham & Henry, 2020). In other words, our ICC function is a "wrapper" function for psych::ICC(), which makes the user's life much easier. This ensures that the underlying data from which the individual vectors come can be in long form, as long as the user can properly extract these vectors from the data.
-
-(I DON'T THINK THIS NEEDS TO BE A SEPARATE SUBSECTION, AND I DON'T THINK THIS LEVEL OF DETAIL IS NEEDED...WHAT DO YOU THINK ABOUT JUST CUTTING THIS?)
-Second, psr::ICC_long() allows for the simultaneous computation of the ICC for multiple metrics, however many the user wants, whereas psych::ICC() is limited in that, as its input data must be in wide form, it can only calculate the ICC for one metric at a time. This is due to the fact that data in "wide" form by construction include only the measurements of one metric.
-
-To further explain the gained efficiency from using the new and improved version of the ICC function, if one wanted to see the ICC output of five different metrics from a given group of subjects and was using psych::ICC(), that person would need to create five different data frames, one for each metric, all in "wide" form, and pass each data frame to the function separately. To illustrate this point further, the user would need to run the following code for each metric of interest:
-
-```{r, eval = FALSE}
-tidyr::pivot_wider(data, names_from = "trial", values_from = "metric")
-psych::ICC(data)
-```
-
-Conversely, using ICC_long(), the user must simply enter the subject and trial vectors before entering the five vectors containing the measurements for each metric, subsequently showing the ICC output for all five metrics after just one function call. In short, the user only needs to run the following code once:
-
-```{r, eval = FALSE}
-psr::ICC_long(subject, trial, metric_1, metric_2, metric_3, metric_4, metric_5)
-```
-
-This simplified process cuts down considerably on the time and effort required by the user in order to see the ICC output for all five metrics. In addition, all of the ICC outputs for the various metrics can be seen one directly after another, making it easier to compare the reliabilities of each metric. 
 
 # 3. Setting Benchmarks for Athletes (What Constitutes Meaningful Change?)
 
@@ -212,7 +117,7 @@ For the SWC function, the user can choose which method should be used for the co
 Computing the SWC for the same data as in the prior three functions looks like this:
 
 ```{r}
-psr::SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
+SWC(subject, trial, metric_1, metric_2, metric_3, effect_size = 0.2, method = 'AVG')
 ```
 
 Thus, in order for an athlete in the data to improve by a worthwhile amount, he or she would need to improve by 5.96 units for metric_1, 0.87 units for metric_2, and 42.45 units for metric_3, respectively.
@@ -228,7 +133,7 @@ This function is similar to SWC(), but has some important differences. The main 
 Using this formula with the usual data, the resulting output is:
 
 ```{r}
-psr::MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95)
+MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95)
 ```
 
 There is one important thing to note from this output. The MDC is larger than the SWC for each metric, which sheds light on the fact that the MDC represents a high threshold for improvement. If an athlete were to achieve a change equal to the MDC, with the default confidence level of 95%, one could be 95% confident that the change was not the result of error. One might not need to have that degree of certainty, and might prefer to set a benchmark for their athletes that is more achievable. Changing the confidence level from 95% to 80% lowers the MDC of each metric considerably, as shown in the code and output below:
@@ -236,7 +141,7 @@ There is one important thing to note from this output. The MDC is larger than th
 Note, the MDC is larger than the SWC for each metric, which sheds light on the fact that the MDC represents a high threshold for improvement. If an athlete were to achieve a change equal to the MDC, with the default confidence level of 95%, one could be 95% confident that the change was not the result of error. One might not need to have that degree of certainty, and might prefer to set a benchmark for their athletes that is more achievable. Changing the confidence level from 95% to 80% lowers the MDC of each metric considerably, as shown in the code and output below:
 
 ```{r}
-psr::MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.80)
+MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.80)
 ```
 
 These MDC's represent changes that, if achieved, a practitioner could be 80% confident is an actual improvement, rather than being due to random chance alone. The important point to remember is that as one decreases the confidence level in MDC(), the MDC also decreases and might be easier for athletes to achieve, but the level of certainty one can have that a change equal to the MDC is a real change decreases as well.
@@ -248,22 +153,7 @@ These MDC's represent changes that, if achieved, a practitioner could be 80% con
 Practitioners may wish to analyze how each athlete compares to his or her teammates or competitors in the same data. For this purpose, STEN() is part of psr, and it represents the Standard Ten (STEN) scores of the athletes for each metric. The STEN scores range from one to ten, with a mean of 5.5. This concept is often used in psychological and personality tests, but it can be applied to performance science as well (Glen, 2015). The function has the simplest form of any function in the package (similar to TE() and CV()), as it takes just the subject, trial, and metric vectors as inputs. It produces simple output that looks as follows for the same data that was used to demonstrate all of the previous functions:
 
 ```{r}
-psr::STEN(subject, trial, metric_1, metric_2, metric_3)
-```
-
-It produces simple output that looks as follows for the same data that was used to demonstrate all of the previous functions:
-(AGAIN, I'M SEEING TWO SETS OF RESULTS IN THE KNITTED VERSION)
-```{r}
-# subject   trial metric_1 metric_2 metric_3
-#       1 Trial 1     5.63     4.85     5.07
-#       1 Trial 2     6.24     3.40     5.74
-#       1 Trial 3     5.78     4.85     5.88
-#       2 Trial 1     7.85     6.79     3.17
-#       2 Trial 2     7.16     8.73     2.87
-#       2 Trial 3     7.70     8.25     3.51
-#       3 Trial 1     3.17     5.34     7.95
-#       3 Trial 2     2.79     3.40     7.77
-#       3 Trial 3     3.17     3.88     7.54
+STEN(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 This output lends insight into how well each athlete performed on each trial, compared to all of the measurements recorded in the data for the same metric. One can see that subject 1 recorded close to the mean of each metric for most of his or her measurements. In Trials 1 and 2, subject 2 recorded high measurements for all three metrics but low measurements in Trial 3, while the opposite was the case for subject 3. This function makes it easy to see how each athlete is performing relative to the other athletes in the data for each of his or her measurements, and how this performance differs across trials and metrics, respectively.
@@ -304,13 +194,9 @@ Occasionally an error in processing the data may result in an athlete having mul
 
 As one can see, Subject 3 has recorded two measurements for Trial 2. One would be correct to note that this subject has also not recorded a measurement for Trial 3, hence Error 1 has also occurred in this code. If both errors occur, only the message for Error 2 is shown to the user, as it does in this example. The above message is shown and offers a clear and concise indicator of what has gone wrong in the code that the user had just entered.
 
-```{r}
-# [1] "Each athlete must not have recorded multiple measurements for any trial"
-```
-
 # 5.3. Character Vector for Metric
 
-In the following error example, the trials are all labeled correctly, but the first metric is entered as a character vector, when it needs to be a numeric vector, and the :
+In the following error example, the trials are all labeled correctly, but the first metric is entered as a character vector, when it needs to be a numeric vector, and the helpful error message is displayed:
 
 ```{r}
 # subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)

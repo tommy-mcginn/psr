@@ -20,6 +20,7 @@ Suggests:
     testthat,
     MASS,
     boot,
-    Matrix
+    Matrix,
+    lme4
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0
