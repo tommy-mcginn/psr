@@ -51,7 +51,7 @@ metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 The TE() function is called by specifying the rows containing the subjects, trials, and metrics:
 
 ```{r}
-TE(subject, trial, metric_1, metric_2, metric_3)
+psr::TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 TE is expressed in terms of the units of the original metric. Thus, the TE of metric_3 is much larger than the TE's of the other two metrics, but that is largely due to the fact that metric_3 is on a different scale than metric_1 and metric_2.
