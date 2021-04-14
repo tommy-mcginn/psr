@@ -40,7 +40,7 @@ following categories:
 
   - Reliability Functions \*\* Typical Error: TE() \*\* Coefficient of
     Variation: CV() \*\* Standard Error of Measurement: SEM() \*\*
-    Intraclass Correlation Coefficient (in long form): ICC\_long()
+    Intra-class Correlation Coefficient (in long form): ICC\_long()
 
   - Individual Change Functions \*\* Smallest Worthwhile Change: SWC()
     \*\* Minimal Detectable Change: MDC()

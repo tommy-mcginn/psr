@@ -21,10 +21,10 @@ The psr package is intended for coaches and analysts in the field of sports perf
 
 Then, the coach would be interested in one or more of the following tasks:
 1. Assess the reliability, or stability of the measurements to verify that they are not contaminated by excessive error.
-2. Determine which athletes showed a statsistically significant improvement in sprint time compared to a baseline measurement.
+2. Determine which athletes showed a statistically significant improvement in sprint time compared to a baseline measurement.
 3. Determine which athletes displayed a practically significant improvement in sprint time.
 
-Specifically, psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intraclass correlation coefficient (ICC_long) functions. ICC_long() builds on the psych::ICC() function by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once. This vignette illustrates the use and intreprets the output of each function via example data.
+Specifically, psr can be used to assess measurement reliability via functions that compute the typical error (TE), coefficient of variation (CV), standard error of measurement (SEM), and intra-class correlation coefficient (ICC_long) functions. ICC_long() builds on the psych::ICC() function by taking data in long format as its input, saving the user the task of pivoting the data to wide format. Furthermore, ICC_long allows for the computation of ICC's for multiple metrics at once. This vignette illustrates the use and interprets the output of each function via example data.
 
 Several of the methods come from the literature of Hopkins (2000), and other well-known sources such as Atkinson & Nevill (1998).
 
@@ -44,7 +44,7 @@ The Typical Error (TE) is the within-athlete variation of the measurements. It i
 
 If there are just two trials being analyzed, the TE is just the standard deviation of the difference scores of each athlete between the first trial and the second trial, divided by root 2 (Hopkins, 2000). If more than two trials are being studied, the TE is the residual standard error of a linear model with the metric as the response and the subject and trial as independent variable, entered into the model as factors (Hopkins, 2000). 
 
-The following (fictional) data set consists of three different athletes performing three trials of a certain task, and three different metrics on biomechanical measurements are recorded:
+The following (fictional) data set consists of three different athletes performing three trials of a certain task, and three different metrics on bio-mechanical measurements are recorded:
 
 ```{r}
 subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
@@ -64,13 +64,13 @@ TE is expressed in terms of the units of the original metric. Thus, the TE of me
 
 ## 2.2. Coefficient of Variation: CV()
 
-The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are inconsistent explanations of the CV in the performance science literature, and this package follows the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error. In other words, the TE is expressed in absolute terms, while the CV represents the same statistic expressed as a percentage of the mean of the data. The CV is a unitless measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
+The Coefficient of Variation (CV) is the TE expressed as a percentage of the mean of the data. It is calculated by first computing the TE of each metric, and dividing this value by the mean of the metric, across all athletes and trials. There are inconsistent explanations of the CV in the performance science literature, and this package follows the interpretation found in Hopkins (2000), which denotes the CV as the typical percentage error. In other words, the TE is expressed in absolute terms, while the CV represents the same statistic expressed as a percentage of the mean of the data. The CV is a unit-less measure, which allows for easy comparison of metrics with different units and scales of measurement, whereas the interpretation of the TE is entirely dependent on unit and scale.
 
 ```{r}
 CV(subject, trial, metric_1, metric_2, metric_3)
 ```
 
-Using the same data as in the section above, it is seen that the CV of metric_2 is actually much larger than the CV's of the other two metrics. Hopkins notes that the CV for a test will typically be 1-5% (Hopkins, 2000). The CV's of metric_1 and metric_3, respectively, fall within this range, while the CV of metric_2 does not.
+Using the same data as in the section above, it is seen that the CV of metric_2 is actually much larger than either CV of the other two metrics. Hopkins notes that the CV for a test will typically be 1-5% (Hopkins, 2000). The CV's of metric_1 and metric_3, respectively, fall within this range, while the CV of metric_2 does not.
 
 ## 2.3. Standard Error of Measurement: SEM()
 
@@ -86,7 +86,7 @@ As noted earlier, SEM() adds one additional argument to those in TE() and CV(). 
 
 Running the code, the familiar form of the output is displayed above. It shows the SEM for each metric, which is useful as a way of comparing the reliability of metrics. The SEM can be interpreted as the minimum change that can be considered real and not due to measurement error (Atkinson & Nevill, 1998).
 
-This output mirrors that of the TE function shown earlier in that metric_2 is more reliable than metric_1, which is more reliable than metric_3. It differs from what the CV output indicates, however, which indicates that metric_2 is actually much less reliable than either metric_1 or metric_3. This pattern emerges because the CV is a unitless measure, whereas both the TE and the SEM derive their intepretations (at least in part) from the units in which they are measured. 
+This output mirrors that of the TE function shown earlier in that metric_2 is more reliable than metric_1, which is more reliable than metric_3. It differs from what the CV output indicates, however, which indicates that metric_2 is actually much less reliable than either metric_1 or metric_3. This pattern emerges because the CV is a unit-less measure, whereas both the TE and the SEM derive their interpretations (at least in part) from the units in which they are measured. 
 
 Another point that is important to emphasize is that for any metric, the confidence band that one can form around the observed score of an athlete by adding and subtracting the SEM only covers 68% of the variability, as the statistic should be interpreted in connection to the normal distribution (Atkinson & Nevill, 1998). This is a weaker threshold than that yielded by a typical MDC value, as will be made clear in the section that describes MDC().  
 

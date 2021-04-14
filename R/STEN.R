@@ -13,7 +13,7 @@
 #'   scores that each athlete recorded for each respective metric (at least one metric must be passed to the function).
 #'
 #' @return A data frame, with the subjects as rows and the metrics as columns, and each entry representing the original measurement
-#'   of the given metric having been converted to the unitless STEN score.
+#'   of the given metric having been converted to the unit-less STEN score.
 #'
 #' @examples
 #' subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
@@ -23,8 +23,8 @@
 #' metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
 #' STEN(subject, trial, metric_1, metric_2, metric_3)
 #'
-#' @references Coaley, K. (2010). Statistics for psychological measurement. In An introduction to psychological assessment and
-#'   psychometrics (pp. 72-96). SAGE Publications Ltd, https://www.doi.org/10.4135/9781446221556.n4
+#' @references Glen, S. (2015). Stephanie Glen. "STEN Score" From StatisticsHowTo.com: Elementary Statistics for the rest of us!
+#'   https://www.statisticshowto.com/sten-score/
 #'
 #' @export
 STEN <- function(subject, trial, ...) {

@@ -1,4 +1,4 @@
-#' @title Intraclass Correlation Coefficient (ICC) for a set of athlete measurements, with the data in long format
+#' @title Intra-class Correlation Coefficient (ICC) for a set of athlete measurements, with the data in long format
 #'
 #' @description Computes the ICC for each vector of measurements that is passed to the function, for the subject and trial vectors
 #'
