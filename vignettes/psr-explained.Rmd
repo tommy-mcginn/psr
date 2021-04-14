@@ -126,7 +126,7 @@ Another application of the SWC is comparing it to the TE as a method of determin
 
 ## 3.2. Minimal Detectable Change: MDC()
 
-With the same goal in mind as the SWC assessing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018) and appears elsewhere in the literature as well (Beekhuizen et al., 2009; de Vet et al., 2006; Bernards et al., 2017).  
+With the same goal in mind as the SWC of assessing individual change, the Minimal Detectable Change (MDC) is simply the SEM  multiplied by root 2 and then multiplied by a critical value that corresponds to a confidence level that the user chooses. It is described in Riemann & Lininger (2018) and appears elsewhere in the literature as well (Beekhuizen et al., 2009; de Vet et al., 2006; Bernards et al., 2017).  
 
 This function is similar to SWC(), but has some important differences. The main such difference is that it includes the ICC in its calculation, and it is based on a critical value of the normal distribution. This critical value is based on how confident the user wants to be that the MDC value generated cannot be explained solely by chance or error. The default confidence level is 0.95, meaning that, if the MDC indicated by the function were to be achieved by an athlete in the data, one could 95% confident is a legitimate change in performance, based on the corresponding critical value from the standard normal distribution. In other words, such a change would be statistically significant at the 5% level.
 
@@ -136,15 +136,11 @@ Using this formula with the usual data, the resulting output is:
 MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.95)
 ```
 
-There is one important thing to note from this output. The MDC is larger than the SWC for each metric, which sheds light on the fact that the MDC represents a high threshold for improvement. If an athlete were to achieve a change equal to the MDC, with the default confidence level of 95%, one could be 95% confident that the change was not the result of error. One might not need to have that degree of certainty, and might prefer to set a benchmark for their athletes that is more achievable. Changing the confidence level from 95% to 80% lowers the MDC of each metric considerably, as shown in the code and output below:
-
 Note, the MDC is larger than the SWC for each metric, which sheds light on the fact that the MDC represents a high threshold for improvement. If an athlete were to achieve a change equal to the MDC, with the default confidence level of 95%, one could be 95% confident that the change was not the result of error. One might not need to have that degree of certainty, and might prefer to set a benchmark for their athletes that is more achievable. Changing the confidence level from 95% to 80% lowers the MDC of each metric considerably, as shown in the code and output below:
 
 ```{r}
 MDC(subject, trial, metric_1, metric_2, metric_3, ICC = c(0.99, 0.93, 0.99), confidence = 0.80)
 ```
-
-These MDC's represent changes that, if achieved, a practitioner could be 80% confident is an actual improvement, rather than being due to random chance alone. The important point to remember is that as one decreases the confidence level in MDC(), the MDC also decreases and might be easier for athletes to achieve, but the level of certainty one can have that a change equal to the MDC is a real change decreases as well.
 
 These MDC's represent changes that, if achieved, a practitioner could be 80% confident is an actual improvement, rather than being due to random chance alone.
 
