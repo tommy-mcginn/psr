@@ -22,5 +22,6 @@ Suggests:
     boot,
     Matrix,
     lme4
+Language: en-US
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0
