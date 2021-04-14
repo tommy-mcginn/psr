@@ -2,7 +2,7 @@
 % Please edit documentation in R/ICCLONG.R
 \name{ICC_long}
 \alias{ICC_long}
-\title{Intraclass Correlation Coefficient (ICC) for a set of athlete measurements, with the data in long format}
+\title{Intra-class Correlation Coefficient (ICC) for a set of athlete measurements, with the data in long format}
 \usage{
 ICC_long(subject, trial, ...)
 }

@@ -90,9 +90,9 @@ This output mirrors that of the TE function shown earlier in that metric_2 is mo
 
 Another point that is important to emphasize is that for any metric, the confidence band that one can form around the observed score of an athlete by adding and subtracting the SEM only covers 68% of the variability, as the statistic should be interpreted in connection to the normal distribution (Atkinson & Nevill, 1998). This is a weaker threshold than that yielded by a typical MDC value, as will be made clear in the section that describes MDC().  
 
-## 2.4. Intraclass Correlation Coefficient: ICC_long()
+## 2.4. Intra-class Correlation Coefficient: ICC_long()
 
-The Intraclass Correlation Coefficient (ICC) is a measure of reliability for a set of measurements that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different experimental designs, as detailed in Shrout & Fleiss (1979). The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
+The Intra-class Correlation Coefficient (ICC) is a measure of reliability for a set of measurements that ranges from 0 to 1, with values closer to 1 indicating a greater degree of reliability. There are six different forms of the ICC that are appropriate for different experimental designs, as detailed in Shrout & Fleiss (1979). The output of ICC_long() prints the ICC values of all six forms, for each metric that was entered as an argument to the function.
 
 ICC_long() is simply a wrapper for psych::ICC(), but has two key differences: it can produce the ICC output for multiple metrics in a single call, and it takes data in long format as its inputs (Revelle, 2020), both of which are explained in detail below.
 
