@@ -85,7 +85,7 @@ SWC <- function(subject, trial, ..., effect_size = 0.2, method = c('AVG', 'MAX',
   }
 
   # The output data frame is printed
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }
 
@@ -166,6 +166,6 @@ MDC <- function(subject, trial, ..., ICC, confidence = 0.95) {
   }
 
   # The output data frame is printed
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }

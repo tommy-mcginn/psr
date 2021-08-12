@@ -163,12 +163,12 @@ Finally, we illustrate potential pitfalls and resulting error messages produced 
 One potential error that could be made is the trials not being labeled in the same way across each athlete. To see an example of this, consider the following code:
 
 ```{r}
-# subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
-# trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 4')
-# metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
-# metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
-# metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
-# TE(subject, trial, metric_1, metric_2, metric_3)
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 4')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 The problem is that subject 3's third measurement is labeled as Trial 4, rather than Trial 3, as is the case for the other two subjects. Subject 3 does not record a measurement for Trial 3, while neither Subject 1 nor Subject 2 record a measurement for Trial 4. This results in the above error message.
@@ -180,12 +180,12 @@ This message precisely explains the issue, which is that each athlete has not re
 Occasionally an error in processing the data may result in an athlete having multiple measurements for one trial. An example of this is shown below:
 
 ```{r}
-# subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
-# trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 2')
-# metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
-# metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
-# metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
-# TE(subject, trial, metric_1, metric_2, metric_3)
+subject <- c(1, 1, 1, 2, 2, 2, 3, 3, 3)
+trial <- c('Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 3', 'Trial 1', 'Trial 2', 'Trial 2')
+metric_1 <- c(250, 258, 252, 279, 270, 277, 218, 213, 218)
+metric_2 <- c(10, 7, 10, 14, 18, 17, 11, 7, 8)
+metric_3 <- c(1214, 1276, 1289, 1037, 1010, 1069, 1481, 1465, 1443)
+TE(subject, trial, metric_1, metric_2, metric_3)
 ```
 
 As one can see, Subject 3 has recorded two measurements for Trial 2. One would be correct to note that this subject has also not recorded a measurement for Trial 3, hence Error 1 has also occurred in this code. If both errors occur, only the message for Error 2 is shown to the user, as it does in this example. The above message is shown and offers a clear and concise indicator of what has gone wrong in the code that the user had just entered.

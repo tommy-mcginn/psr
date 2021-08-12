@@ -57,7 +57,7 @@ TE <- function(subject, trial, ...) {
   }
 
   # The output data frame is printed
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }
 
@@ -121,7 +121,7 @@ CV <- function(subject, trial, ...) {
   }
 
   # The output data frame is printed
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }
 
@@ -197,6 +197,6 @@ SEM <- function(subject, trial, ..., ICC) {
   }
 
   # The output data frame is printed
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }

@@ -54,6 +54,6 @@ STEN <- function(subject, trial, ...) {
   }
 
   # I print the data frame in this way as the output so that I can hide the "1" that otherwise appears as the row number
-  print.data.frame(output_df, row.names = FALSE)
+  print(output_df, row.names = FALSE)
 
 }
